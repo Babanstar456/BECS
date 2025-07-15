@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BECS Learning Platform - Teacher Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #F5F5F5;
+            color: #333333;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background: #FFFFFF;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .header .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header .logo-text span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #D32F2F;
+        }
+
+        .header .logo-text .tagline {
+            font-size: 0.9rem;
+            color: #666666;
+            font-weight: 300;
+        }
+
+        .header .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header .nav-menu a {
+            color: #333333;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 10px;
+        }
+
+        .header .nav-menu a:hover {
+            color: #D32F2F;
+            transform: translateY(-2px);
+        }
+
+        .header .nav-menu a.active {
+            color: #D32F2F;
+            border-bottom: 3px solid #D32F2F;
+            padding-bottom: 5px;
+        }
+
+        .header .nav-menu .profile-link {
+            position: relative;
+        }
+
+        .header .nav-menu .profile-completion {
+            background: #D32F2F;
+            color: #FFFFFF;
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+
+        .header .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header .profile-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header .profile-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 12px rgba(211, 47, 47, 0.4);
+        }
+
+        .header .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            color: #333333;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            padding: 10px;
+        }
+
+        .header .hamburger:hover {
+            color: #D32F2F;
+        }
+
+        /* Profile Dropdown Styles */
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 80px;
+            right: 40px;
+            background: #FFFFFF;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            z-index: 1000;
+        }
+
+        .profile-dropdown h3 {
+            font-size: 1.4rem;
+            color: #333333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .profile-dropdown form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .profile-dropdown label {
+            font-size: 1rem;
+            color: #666666;
+            margin-bottom: 5px;
+        }
+
+        .profile-dropdown input,
+        .profile-dropdown textarea {
+            background: #F5F5F5;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            color: #333333;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .profile-dropdown input[type="file"] {
+            padding: 5px;
+        }
+
+        .profile-dropdown input:focus,
+        .profile-dropdown textarea:focus {
+            border-color: #D32F2F;
+            box-shadow: 0 0 8px rgba(211, 47, 47, 0.3);
+        }
+
+        .profile-dropdown textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .profile-dropdown .dropdown-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .profile-dropdown button {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-dropdown button:disabled {
+            background: #CCCCCC;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .profile-dropdown button.cancel {
+            background: #F5F5F5;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            color: #333333;
+        }
+
+        .profile-dropdown button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(211, 47, 47, 0.4);
+        }
+
+        .profile-dropdown button.cancel:hover {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            border-color: #D32F2F;
+            color: #FFFFFF;
+        }
+
+        .profile-dropdown button:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 3px 6px rgba(211, 47, 47, 0.2);
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #FFFFFF;
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            color: #333333;
+            font-size: 1rem;
+            z-index: 1001;
+            display: none;
+        }
+
+        .notification.success {
+            border-color: #D32F2F;
+            background: #F5F5F5;
+        }
+
+        .notification.error {
+            border-color: #FF6F61;
+            background: #FFF5F5;
+        }
+
+        .notification.info {
+            border-color: #D32F2F;
+            background: #F5F5F5;
+        }
+
+        /* Dashboard Section Styles */
+        .dashboard-section {
+            padding: 50px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard-section h2 {
+            font-size: 2.8rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+            color: #333333;
+            text-align: center;
+            letter-spacing: 1.2px;
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .dashboard-card {
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(211, 47, 47, 0.3);
+            border-color: #D32F2F;
+        }
+
+        .dashboard-card i {
+            font-size: 2.5rem;
+            color: #D32F2F;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-card h3 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #333333;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-card p {
+            font-size: 1rem;
+            color: #666666;
+            line-height: 1.6;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: #FFFFFF;
+            padding: 40px 20px;
+            border-top: 2px solid rgba(211, 47, 47, 0.2);
+            color: #666666;
+            text-align: center;
+        }
+
+        .footer .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .footer .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #333333;
+            margin-bottom: 15px;
+        }
+
+        .footer p,
+        .footer a {
+            font-size: 0.9rem;
+            color: #666666;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .footer a:hover {
+            color: #D32F2F;
+        }
+
+        .footer .social-icons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .footer .social-icons a {
+            font-size: 1.2rem;
+            color: #D32F2F;
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-icons a:hover {
+            color: #FF6F61;
+        }
+
+        .footer .copyright {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #666666;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+
+            .header .logo-text span {
+                font-size: 1.2rem;
+            }
+
+            .header .logo-text .tagline {
+                font-size: 0.8rem;
+            }
+
+            .header .nav-menu {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: #FFFFFF;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding: 20px;
+                border-top: 1px solid rgba(211, 47, 47, 0.2);
+            }
+
+            .header .nav-menu.active {
+                display: flex;
+            }
+
+            .header .nav-menu a {
+                font-size: 1.1rem;
+                padding: 15px 0;
+            }
+
+            .header .nav-menu .profile-completion {
+                font-size: 0.7rem;
+                padding: 2px 6px;
+            }
+
+            .header .hamburger {
+                display: flex;
+                align-items: center;
+            }
+
+            .header .header-icons {
+                gap: 10px;
+            }
+
+            .header .profile-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .profile-dropdown {
+                top: 70px;
+                right: 20px;
+                width: 90%;
+                max-width: 280px;
+                padding: 20px;
+            }
+
+            .profile-dropdown h3 {
+                font-size: 1.2rem;
+            }
+
+            .profile-dropdown input,
+            .profile-dropdown textarea {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+            .profile-dropdown button {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .notification {
+                top: 10px;
+                right: 10px;
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .dashboard-section {
+                padding: 30px 15px;
+            }
+
+            .dashboard-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .dashboard-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .dashboard-card p {
+                font-size: 0.9rem;
+            }
+
+            .footer .footer-content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer .footer-section {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="../image/banerjee electronics real logo.jpg" alt="BECS Logo">
+            <div class="logo-text">
+                <span>BECS Learning</span>
+                <p class="tagline">Empowering Tech Education</p>
+            </div>
+        </div>
+        <nav class="nav-menu">
+            <a href="./teacher_dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="#" id="complete-profile-link" class="profile-link"><i class="fas fa-user-edit"></i> Complete
+                Profile <span class="profile-completion" id="profile-completion">0%</span></a>
+        </nav>
+        <div class="header-icons">
+            <div class="profile-icon" id="profile-icon">T</div>
+        </div>
+        <div class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="profile-dropdown" id="profile-dropdown">
+            <h3>Complete Your Profile</h3>
+            <form id="profile-form">
+                <label for="profile-photo">Profile Photo</label>
+                <input type="file" id="profile-photo" accept="image/*">
+                <label for="profile-name">Name</label>
+                <input type="text" id="profile-name" placeholder="Your Name" required>
+                <label for="profile-email">Email</label>
+                <input type="email" id="profile-email" placeholder="your.email@example.com" required>
+                <label for="profile-password">Password</label>
+                <input type="password" id="profile-password" placeholder="Enter new password">
+                <label for="profile-bio">Bio</label>
+                <textarea id="profile-bio" placeholder="Tell us about yourself"></textarea>
+                <label for="profile-expertise">Area of Expertise</label>
+                <input type="text" id="profile-expertise" placeholder="e.g., Circuit Design, Programming">
+                <div class="dropdown-buttons">
+                    <button type="submit" id="save-profile">Save</button>
+                    <button type="button" class="cancel" id="cancel-profile">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </header>
+
+    <div class="notification" id="notification"></div>
+
+    <section class="dashboard-section">
+        <h2>Teacher Dashboard</h2>
+        <div class="dashboard-cards">
+            <div class="dashboard-card" id="live-lecture">
+                <i class="fas fa-video"></i>
+                <h3>Live Lecture</h3>
+                <p>Set up live lecture details and YouTube link.</p>
+            </div>
+            <div class="dashboard-card" id="recorded-lecture">
+                <i class="fas fa-film"></i>
+                <h3>Recorded Lecture</h3>
+                <p>Upload and organize recorded lectures for student access.</p>
+            </div>
+            <div class="dashboard-card" id="notes-manage">
+                <i class="fas fa-file-alt"></i>
+                <h3>Notes Manage</h3>
+                <p>Create, edit, and share course notes with your students.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: support@becslearning.com</p>
+                <p>Phone: +1 (123) 456-7890</p>
+                <p>Address: 123 Tech Lane, EdTech City</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="./teacher_dashboard.html">Dashboard</a>
+                <a href="./contact-us.html">Contact Us</a>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 BECS Learning Platform. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        const sharedData = {
+            teacher: {
+                name: "",
+                email: "",
+                photo: "",
+                bio: "",
+                expertise: "",
+                notifications: 0
+            },
+            liveLecture: {
+                chapterName: "",
+                title: "",
+                about: "",
+                link: ""
+            }
+        };
+
+        const profileIcon = document.getElementById('profile-icon');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const profileForm = document.getElementById('profile-form');
+        const saveButton = document.getElementById('save-profile');
+        const cancelProfile = document.getElementById('cancel-profile');
+        const notification = document.getElementById('notification');
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        const completeProfileLink = document.getElementById('complete-profile-link');
+        const profileCompletion = document.getElementById('profile-completion');
+
+        function updateProfileDisplay() {
+            profileIcon.textContent = sharedData.teacher.name ? sharedData.teacher.name.charAt(0).toUpperCase() : 'T';
+            const fields = ['name', 'email', 'photo', 'bio', 'expertise'];
+            const filledFields = fields.filter(field => sharedData.teacher[field]).length;
+            const completionPercentage = Math.round((filledFields / fields.length) * 100);
+            profileCompletion.textContent = `${completionPercentage}%`;
+        }
+
+        updateProfileDisplay();
+
+        [profileIcon, completeProfileLink].forEach(element => {
+            element.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+                document.getElementById('profile-name').value = sharedData.teacher.name || '';
+                document.getElementById('profile-email').value = sharedData.teacher.email || '';
+                document.getElementById('profile-password').value = '';
+                document.getElementById('profile-bio').value = sharedData.teacher.bio || '';
+                document.getElementById('profile-expertise').value = sharedData.teacher.expertise || '';
+                document.getElementById('profile-photo').value = '';
+                notification.style.display = 'none';
+            });
+        });
+
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            hamburger.innerHTML = navMenu.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!profileIcon.contains(e.target) && !profileDropdown.contains(e.target) && !completeProfileLink.contains(e.target)) {
+                profileDropdown.style.display = 'none';
+                notification.style.display = 'none';
+            }
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function isValidEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        profileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            saveButton.disabled = true;
+
+            try {
+                const newName = document.getElementById('profile-name').value.trim();
+                const newEmail = document.getElementById('profile-email').value.trim();
+                const newPassword = document.getElementById('profile-password').value.trim();
+                const newBio = document.getElementById('profile-bio').value.trim();
+                const newExpertise = document.getElementById('profile-expertise').value.trim();
+                const photoFile = document.getElementById('profile-photo').files[0];
+
+                if (newName.length < 2) {
+                    showNotification('Name must be at least 2 characters long.', 'error');
+                    return;
+                }
+                if (!isValidEmail(newEmail)) {
+                    showNotification('Please enter a valid email address.', 'error');
+                    return;
+                }
+                if (newPassword && newPassword.length < 6) {
+                    showNotification('Password must be at least 6 characters long.', 'error');
+                    return;
+                }
+                if (newBio && newBio.length > 500) {
+                    showNotification('Bio cannot exceed 500 characters.', 'error');
+                    return;
+                }
+                if (newExpertise && newExpertise.length > 100) {
+                    showNotification('Expertise cannot exceed 100 characters.', 'error');
+                    return;
+                }
+                if (photoFile && !['image/jpeg', 'image/png'].includes(photoFile.type)) {
+                    showNotification('Please upload a valid image (JPEG or PNG).', 'error');
+                    return;
+                }
+
+                sharedData.teacher.name = newName;
+                sharedData.teacher.email = newEmail;
+                sharedData.teacher.bio = newBio;
+                sharedData.teacher.expertise = newExpertise;
+
+                if (photoFile) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        sharedData.teacher.photo = reader.result;
+                        updateProfileDisplay();
+                        showNotification('Profile updated successfully!', 'success');
+                        profileDropdown.style.display = 'none';
+                    };
+                    reader.onerror = () => {
+                        showNotification('Error reading photo file.', 'error');
+                    };
+                    reader.readAsDataURL(photoFile);
+                } else {
+                    updateProfileDisplay();
+                    showNotification('Profile updated successfully!', 'success');
+                    profileDropdown.style.display = 'none';
+                }
+            } catch (error) {
+                showNotification('An error occurred while saving the profile.', 'error');
+            } finally {
+                saveButton.disabled = false;
+            }
+        });
+
+        cancelProfile.addEventListener('click', () => {
+            profileDropdown.style.display = 'none';
+            notification.style.display = 'none';
+        });
+
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                if (this.id !== 'complete-profile-link') {
+                    e.preventDefault();
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    navMenu.classList.remove('active');
+                    hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+                    window.location.href = this.href;
+                }
+            });
+        });
+
+        document.getElementById('live-lecture').addEventListener('click', () => {
+            window.location.href = './live lecture.html';
+        });
+
+        document.getElementById('recorded-lecture').addEventListener('click', () => {
+            window.location.href = './recorded lecture.html';
+        });
+
+        document.getElementById('notes-manage').addEventListener('click', () => {
+            window.location.href = './notes manage.html';
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banerjee Electronics - FAQ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #ff0000dc;
+            --secondary-color: #000000;
+            --accent-color: #ffffff;
+            --text-primary: #000000;
+            --text-secondary: #666666;
+            --background-light: #f5f5f5;
+            --gradient-primary: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+            --gradient-secondary: linear-gradient(135deg, #000000 0%, #333333 100%);
+        }
+
+        body {
+            font-family: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.4;
+            color: var(--text-primary);
+            background: var(--background-light);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo img {
+            width: 61px;
+            height: 60px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--accent-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: var(--gradient-primary);
+            color: var(--accent-color);
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .user-profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-initials {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-initials:hover, .user-initials:focus {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: var(--accent-color);
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            width: 200px;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+        }
+
+        .user-dropdown.active {
+            display: flex;
+        }
+
+        .user-dropdown a {
+            padding: 12px 20px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown a:hover, .user-dropdown a:focus {
+            background: var(--gradient-primary);
+            color: var(--accent-color);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            max-width: 800px;
+            margin: 100px auto 80px;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            text-align: center;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .faq-item {
+            background: linear-gradient(135deg, #ffffff 70%, #ffcccc 100%);
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-question {
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--gradient-primary);
+            color: var(--accent-color);
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 20px;
+            background: var(--accent-color);
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .faq-answer.active {
+            display: block;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--secondary-color);
+            color: var(--accent-color);
+            padding: 60px 20px 30px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .footer-section p, .footer-section li {
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover, .footer-section a:focus {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover, .social-link:focus {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.2);
+            margin-top: 40px;
+            padding-top: 20px;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: rgba(0, 0, 0, 0.95);
+                flex-direction: column;
+                justify-content: start;
+                padding-top: 50px;
+                transition: left 0.3s ease, opacity 0.3s ease;
+                opacity: 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+                opacity: 1;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .faq-section {
+                margin: 80px auto 60px;
+            }
+
+            .user-dropdown {
+                width: 100%;
+                right: 0;
+                top: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .faq-question {
+                font-size: 1rem;
+            }
+
+            .faq-answer {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="after login" class="logo">
+                <img src="./image/banerjee electronics real logo.jpg" alt="Banerjee Electronics Logo" height="60" width="61">
+                Banerjee Electronics
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="after login.html#home" class="nav-link">Home</a></li>
+                <li><a href="after login.html#services" class="nav-link">Services</a></li>
+                <li><a href="after login.html#products" class="nav-link">Products</a></li>
+                <li><a href="after login.html#technologies" class="nav-link">Technologies</a></li>
+                <li><a href="./electronics shop.html" class="nav-link">Electronics Shop</a></li>
+                <li><a href="after login.html#consultation" class="nav-link nav-cta">Get Quote</a></li>
+                <li class="user-profile">
+                    <div class="user-initials" id="userInitials" role="button" aria-label="User Profile" tabindex="0">AM</div>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="./complete profile.html">Edit Profile</a>
+                        <a href="./order track coustomer.html">Order Tracking</a>
+                        <a href="./faq section.html" class="active">FAQ Section</a>
+                        <a href="./login.html" onclick="logout()">Log Out</a>
+                    </div>
+                </li>
+            </ul>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="section-title">Frequently Asked Questions</div>
+        <div class="section-subtitle">Find answers to common questions about our products, services, and ordering process.</div>
+        
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-question">
+                    What products does Banerjee Electronics offer?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Banerjee Electronics provides a range of smart home and industrial automation products, including the Smart Controller Pro, Wireless Sensor Hub, Security System Elite, and Automation Gateway. We also offer custom electronics design for specific needs.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    How can I track my order?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    You can track your order by visiting the <a href="order-tracking.html">Order Tracking</a> page in your account. It displays the status of your orders (Processing, Shipped, or Delivered) along with details like product name, price, and order date.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    What is the warranty period for your products?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Most of our products come with a standard 1-year warranty covering manufacturing defects. Extended warranty options are available for select products. Contact our support team at info@banerjeeelectronics.com for details.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    How do I update my profile information?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    You can update your name, email, phone number, and other details by visiting the <a href="edit-profile.html">Edit Profile</a> page in your account. Click "Save Changes" to update your information.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    Do you offer installation services for smart home solutions?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes, we provide professional installation services for our smart home solutions. You can request a quote or schedule an installation by contacting us through the <a href="after login#consultation">Get Quote</a> section.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    What payment methods do you accept?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    We accept payments via credit/debit cards, UPI, net banking, and select digital wallets. Payment options are displayed during checkout. For bulk orders, contact us for additional payment arrangements.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    How can I contact customer support?
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    You can reach our customer support team at <a href="mailto:info@banerjeeelectronics.com">info@banerjeeelectronics.com</a> or by calling +91 98765 43210, Monday to Saturday, 9 AM to 7 PM IST. You can also use the chatbot on our homepage for quick assistance.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Banerjee Electronics</h3>
+                <p>Leading provider of advanced automation solutions, smart electronics, and innovative technology systems for businesses and homes.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Services</h3>
+                <ul>
+                    <li><a href="after login#services">Industrial Automation</a></li>
+                    <li><a href="after login#services">Smart Home Solutions</a></li>
+                    <li><a href="after login#services">Maintenance & Support</a></li>
+                    <li><a href="after login#services">Custom Electronics Design</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="after login#home">Home</a></li>
+                    <li><a href="after login#products">Products</a></li>
+                    <li><a href="after login#technologies">Technologies</a></li>
+                    <li><a href="after login#consultation">Get Quote</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Bhatpara, West Bengal, India</li>
+                    <li><i class="fas fa-phone"></i> +91 98765 43210</li>
+                    <li><i class="fas fa-envelope"></i> info@banerjeeelectronics.com</li>
+                    <li><i class="fas fa-clock"></i> Mon-Sat: 9AM-7PM</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Banerjee Electronics. All rights reserved.
+                <br>Designed and Developed by <a href="https://tathagatasengupta.in/techacon%20solution/after login">Techacon Solution</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let userContext = JSON.parse(localStorage.getItem('userContext')) || {
+            firstName: 'Avi',
+            lastName: 'Mukherjee',
+            email: 'avi.mukherjee@example.com',
+            phone: '+91 98765 43210',
+            bio: '',
+            orders: []
+        };
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('userInitials').textContent = `${userContext.firstName.charAt(0)}${userContext.lastName.charAt(0)}`.toUpperCase();
+            setupFAQ();
+        });
+
+        // Setup FAQ accordion
+        function setupFAQ() {
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const answer = question.nextElementSibling;
+                    const icon = question.querySelector('i');
+                    const isActive = answer.classList.contains('active');
+
+                    // Close all other answers
+                    document.querySelectorAll('.faq-answer').forEach(ans => {
+                        ans.classList.remove('active');
+                    });
+                    document.querySelectorAll('.faq-question').forEach(q => {
+                        q.classList.remove('active');
+                        q.querySelector('i').classList.remove('fa-chevron-up');
+                        q.querySelector('i').classList.add('fa-chevron-down');
+                    });
+
+                    // Toggle current answer
+                    if (!isActive) {
+                        answer.classList.add('active');
+                        question.classList.add('active');
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    }
+                });
+
+                // Keyboard accessibility
+                question.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        question.click();
+                    }
+                });
+            });
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('userContext');
+            localStorage.removeItem('cart');
+            localStorage.removeItem('chatHistory');
+            alert('You have been logged out.');
+            window.location.href = 'login.html';
+        }
+
+        // Toggle user dropdown
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('userDropdown');
+            const initials = document.getElementById('userInitials');
+            if (!dropdown.contains(e.target) && !initials.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        // Add click and keypress events to user initials
+        const userInitials = document.getElementById('userInitials');
+        userInitials.addEventListener('click', toggleUserDropdown);
+        userInitials.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                toggleUserDropdown();
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        mobileToggle.addEventListener('click', function() {
+            const navMenu = document.getElementById('navMenu');
+            const toggleIcon = mobileToggle.querySelector('i');
+            navMenu.classList.toggle('active');
+            mobileToggle.classList.toggle('active');
+            if (navMenu.classList.contains('active')) {
+                toggleIcon.classList.remove('fa-bars');
+                toggleIcon.classList.add('fa-times');
+                mobileToggle.setAttribute('aria-label', 'Close Menu');
+            } else {
+                toggleIcon.classList.remove('fa-times');
+                toggleIcon.classList.add('fa-bars');
+                mobileToggle.setAttribute('aria-label', 'Toggle Menu');
+            }
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Handle window resize for responsive adjustments
+        window.addEventListener('resize', () => {
+            const navMenu = document.getElementById('navMenu');
+            const mobileToggle = document.getElementById('mobileToggle');
+            if (window.innerWidth > 768 && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                mobileToggle.classList.remove('active');
+                mobileToggle.querySelector('i').classList.remove('fa-times');
+                mobileToggle.querySelector('i').classList.add('fa-bars');
+                mobileToggle.setAttribute('aria-label', 'Toggle Menu');
+            }
+        });
+    </script>
+</body>
+</html>

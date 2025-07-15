@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BECS Learning Platform - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #F5F5F5;
+            color: #333333;
+            overflow-x: hidden;
+        }
+
+        .login-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, #FFFFFF 0%, #E0E0E0 50%, #FFFFFF 100%);
+            animation: gradientShift 15s ease-in-out infinite;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+
+            0%,
+            100% {
+                background: linear-gradient(135deg, #FFFFFF 0%, #E0E0E0 50%, #FFFFFF 100%);
+            }
+
+            50% {
+                background: linear-gradient(135deg, #E0E0E0 0%, #FFFFFF 50%, #E0E0E0 100%);
+            }
+        }
+
+        .login-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 10% 20%, rgba(211, 47, 47, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 111, 97, 0.2) 0%, transparent 40%);
+            animation: pulseGlow 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                opacity: 0.2;
+            }
+
+            100% {
+                opacity: 0.5;
+            }
+        }
+
+        .login-container {
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px;
+            background: #FFFFFF;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1.2s ease-out;
+            z-index: 2;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(211, 47, 47, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .login-container:hover::before {
+            left: 100%;
+        }
+
+        .login-container:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(211, 47, 47, 0.2);
+            border-color: #D32F2F;
+        }
+
+        .login-container h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #333333;
+            text-shadow: 0 0 10px rgba(211, 47, 47, 0.2);
+        }
+
+        .role-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .role-tab {
+            background: #E0E0E0;
+            color: #333333;
+            padding: 10px 20px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .role-tab.active {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            border-color: #D32F2F;
+        }
+
+        .role-tab:hover {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-group {
+            position: relative;
+            text-align: left;
+        }
+
+        .input-group i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #D32F2F;
+            font-size: 1.1rem;
+        }
+
+        .login-container {
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .login-container:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(211, 47, 47, 0.2);
+        }
+        .role-tab {
+            transition: all 0.3s ease;
+        }
+        .role-tab:hover {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: white;
+        }
+        .glow-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(211, 47, 47, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        .login-container:hover .glow-effect::before {
+            left: 100%;
+        }
+        .google-btn {
+            background: #4285F4;
+            transition: all 0.3s ease;
+        }
+        .google-btn:hover {
+            background: #357ae8;
+            transform: scale(1.03);
+        }
+        .google-btn:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+
+<body>
+    <section class="login-section">
+  <div class="login-container">
+    <h2>BECS Learning Platform</h2>
+
+    <!-- Role Tabs -->
+    <div class="role-tabs">
+      <button class="role-tab active" data-role="student">Student Login</button>
+      <button class="role-tab" data-role="teacher">Teacher Login</button>
+    </div>
+
+    <!-- Hidden role input -->
+    <input type="hidden" name="role" value="student" />
+
+    <!-- Login Form -->
+    <form class="login-form flex flex-col gap-4" id="login-form">
+                <button type="button" id="google-login" class="google-btn flex items-center justify-center gap-2 text-white px-6 py-3 rounded-full font-semibold text-base shadow-md">
+                    <i class="fab fa-google text-lg"></i> Sign in with Google
+                </button>
+            </form>
+
+            <div class="signup-link text-center mt-4">
+                <a href="./signup.html" class="text-red-500 font-medium hover:text-red-400 hover:underline transition-colors">Don't have an account? Sign Up</a>
+            </div>
+        </div>
+</section>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="firebase.js"></script> <!-- your config -->
+<script src="auth.js"></script>    <!-- login logic -->
+
+<!-- Role Switching + Firebase Auth JS -->
+<script>
+        // Firebase configuration (assumed to be in firebase.js, included inline for completeness)
+        const firebaseConfig = {
+  apiKey: "AIzaSyB5Ur6-mq9uE4fU0HOaQQhKk3nayTiQCfk",
+  authDomain: "becs-370ab.firebaseapp.com",
+  projectId: "becs-370ab",
+  storageBucket: "becs-370ab.firebasestorage.app",
+  messagingSenderId: "265733015540",
+  appId: "1:265733015540:web:fddcee2dc226ad9be85ba1",
+  measurementId: "G-0ECNR1HQLM"
+};
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        const roleTabs = document.querySelectorAll('.role-tab');
+        const roleInput = document.querySelector('input[name="role"]');
+        const googleLoginBtn = document.getElementById("google-login");
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        // Role Switching
+        roleTabs.forEach(tab => {
+            tab.addEventListener('click', function () {
+                roleTabs.forEach(t => t.classList.remove('active', 'bg-gradient-to-r', 'from-red-500', 'to-red-400', 'text-white'));
+                this.classList.add('active', 'bg-gradient-to-r', 'from-red-500', 'to-red-400', 'text-white');
+                roleInput.value = this.dataset.role;
+            });
+        });
+
+        // Google Sign-In Handler
+        googleLoginBtn.addEventListener("click", async () => {
+            try {
+                const result = await firebase.auth().signInWithPopup(provider);
+                const email = result.user.email;
+                const role = roleInput.value;
+
+                alert(`Google Login Successful as ${role}: ${email}`);
+
+                // Redirect based on role
+                if (role === 'student') {
+                    window.location.href = 'student landing.html';
+                } else if (role === 'teacher') {
+                    window.location.href = '../TEACHER_LOGIN/landing.html';
+                }
+            } catch (error) {
+                console.error("Google Sign-In Error:", error);
+                alert("Google Sign-In failed: " + error.message);
+            }
+        });
+
+        // Check if user is already signed in
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                const role = roleInput.value;
+                if (role === 'student') {
+                    window.location.href = 'student landing.html';
+                } else if (role === 'teacher') {
+                    window.location.href = '../TEACHER_LOGIN/landing.html';
+                }
+            }
+        });
+    </script>
+</script>
+
+</body>
+
+</html>

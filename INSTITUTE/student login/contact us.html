@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BECS Learning Platform - Contact Us</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #F5F5F5;
+            color: #333333;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background: #FFFFFF;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid rgba(179, 68, 68, 0.3);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .header .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header .logo-text span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #B34444;
+        }
+
+        .header .logo-text .tagline {
+            font-size: 0.9rem;
+            color: #666666;
+            font-weight: 300;
+        }
+
+        .header .search-bar {
+            position: relative;
+            max-width: 300px;
+            flex: 1;
+            margin: 0 20px;
+        }
+
+        .header .search-bar input {
+            width: 100%;
+            padding: 8px 35px 8px 15px;
+            background: #FFFFFF;
+            border: 1px solid rgba(179, 68, 68, 0.3);
+            border-radius: 20px;
+            color: #333333;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .header .search-bar input:focus {
+            border-color: #B34444;
+            box-shadow: 0 0 8px rgba(179, 68, 68, 0.3);
+        }
+
+        .header .search-bar .search-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #B34444;
+            font-size: 1.1rem;
+        }
+
+        .header .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header .nav-menu a {
+            color: #333333;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        .header .nav-menu a:hover {
+            color: #B34444;
+            transform: translateY(-2px);
+        }
+
+        .header .nav-menu a.active {
+            color: #B34444;
+            border-bottom: 3px solid #B34444;
+            padding-bottom: 5px;
+        }
+
+        .header .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            color: #333333;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .header .hamburger:hover {
+            color: #B34444;
+        }
+
+        /* Contact Section Styles */
+        .contact-section {
+            padding: 50px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-section h2 {
+            font-size: 2.8rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+            color: #333333;
+            text-align: center;
+            letter-spacing: 1.2px;
+        }
+
+        .contact-section p {
+            font-size: 1.2rem;
+            color: #666666;
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .contact-form {
+            background: linear-gradient(145deg, #FFFFFF, #F5F5F5);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(179, 68, 68, 0.3);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .contact-form:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(179, 68, 68, 0.5);
+            border-color: #B34444;
+        }
+
+        .contact-form form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-form label {
+            font-size: 1.1rem;
+            color: #666666;
+            margin-bottom: 5px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            background: #F5F5F5;
+            border: 1px solid rgba(179, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            color: #333333;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: #B34444;
+            box-shadow: 0 0 8px rgba(179, 68, 68, 0.3);
+        }
+
+        .contact-form button {
+            background: linear-gradient(135deg, #B34444 0%, #C86464 100%);
+            color: #FFFFFF;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-self: center;
+        }
+
+        .contact-form button:disabled {
+            background: #B0B0B0;
+            cursor: not-allowed;
+        }
+
+        .contact-form button:hover:not(:disabled) {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 15px rgba(179, 68, 68, 0.5);
+        }
+
+        .contact-form button:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 4px 8px rgba(179, 68, 68, 0.3);
+        }
+
+        .contact-info {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            border: 1px solid rgba(179, 68, 68, 0.3);
+        }
+
+        .contact-info-item i {
+            font-size: 1.5rem;
+            color: #B34444;
+        }
+
+        .contact-info-item p {
+            font-size: 1.1rem;
+            color: #333333;
+            margin: 0;
+        }
+
+        /* Profile Card Styles */
+        .profile-card {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            transition: 0.3s ease;
+            margin: 40px auto;
+        }
+
+        .profile-card h2 {
+            font-size: 26px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .profile-card p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .signout-btn {
+            background-color: #ff3b30;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .signout-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        .loading {
+            font-size: 18px;
+            color: #888;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            display: none;
+        }
+
+        .notification.success {
+            background-color: #28a745;
+        }
+
+        .notification.error {
+            background-color: #dc3545;
+        }
+
+        .notification.info {
+            background-color: #17a2b8;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: #FFFFFF;
+            padding: 40px 20px;
+            border-top: 2px solid rgba(179, 68, 68, 0.3);
+            color: #666666;
+            text-align: center;
+        }
+
+        .footer .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .footer .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #333333;
+            margin-bottom: 15px;
+        }
+
+        .footer p,
+        .footer a {
+            font-size: 0.9rem;
+            color: #666666;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .footer a:hover {
+            color: #B34444;
+        }
+
+        .footer .social-icons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .footer .social-icons a {
+            font-size: 1.2rem;
+            color: #B34444;
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-icons a:hover {
+            color: #C86464;
+        }
+
+        .footer .copyright {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #666666;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+
+            .header .logo-text span {
+                font-size: 1.2rem;
+            }
+
+            .header .logo-text .tagline {
+                font-size: 0.8rem;
+            }
+
+            .header .search-bar {
+                order: 3;
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            .header .nav-menu {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: #FFFFFF;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding: 20px;
+                border-top: 1px solid rgba(179, 68, 68, 0.3);
+            }
+
+            .header .nav-menu.active {
+                display: flex;
+            }
+
+            .header .nav-menu a {
+                font-size: 1.1rem;
+                padding: 10px 0;
+            }
+
+            .header .hamburger {
+                display: block;
+            }
+
+            .contact-section {
+                padding: 30px 15px;
+            }
+
+            .contact-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .contact-section p {
+                font-size: 1rem;
+            }
+
+            .contact-form {
+                padding: 25px;
+            }
+
+            .contact-form label {
+                font-size: 1rem;
+            }
+
+            .contact-form input,
+            .contact-form textarea {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+
+            .contact-form button {
+                padding: 10px 25px;
+                font-size: 1rem;
+            }
+
+            .contact-info-item {
+                padding: 12px;
+            }
+
+            .contact-info-item i {
+                font-size: 1.2rem;
+            }
+
+            .contact-info-item p {
+                font-size: 1rem;
+            }
+
+            .footer .footer-content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer .footer-section {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="./banerjee electronics real logo.jpg" alt="BECS Logo">
+            <div class="logo-text">
+                <span>BECS Learning</span>
+                <p class="tagline">Empowering Tech Education</p>
+            </div>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search courses or simulations...">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+        <nav class="nav-menu">
+            <a href="./student landing.html"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="./purchase page.html"><i class="fas fa-book"></i> Purchased Courses</a>
+            <a href="./contact us.html" class="active"><i class="fas fa-headset"></i> Support</a>
+        </nav>
+        <div class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <div class="notification" id="notification"></div>
+
+   <section class="contact-section">
+        <h2>Contact Us</h2>
+        <p>We're here to help! Fill out the form below or reach out using our contact details.</p>
+        <div class="contact-form">
+            <form id="contact-form" method="post" action="https://script.google.com/macros/s/AKfycbzQINTHrKHCBY4tl9WUl7RLyQR8zgxJqHm58M9MM6WxB4wtRakbJQiVRy25lXsDsLDo/exec">
+                <label for="contact-name">Name</label>
+                <input type="text" id="contact-name" name="Fullname" placeholder="Your Name" required>
+                <label for="contact-email">Email</label>
+                <input type="email" id="contact-email" name="Email" placeholder="Your Email" required>
+                <label for="contact-subject">Subject</label>
+                <input type="text" id="contact-subject" name="Subject" placeholder="Subject" required>
+                <label for="contact-message">Message</label>
+                <textarea id="contact-message" name="message" placeholder="Your Message" required></textarea>
+                <button type="submit" id="submit-contact">Send Message</button>
+            </form>
+        </div>
+        
+        <div class="contact-info">
+            <div class="contact-info-item">
+                <i class="fas fa-envelope"></i>
+                <p>support@becslearning.com</p>
+            </div>
+            <div class="contact-info-item">
+                <i class="fas fa-phone"></i>
+                <p>+1 (123) 456-7890</p>
+            </div>
+            <div class="contact-info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <p>123 Tech Lane, EdTech City</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="profile-card" id="profile">
+        <div id="loading" class="loading">Fetching your profile...</div>
+        <div id="content" style="display: none;">
+            <h2 id="user-name">User</h2>
+            <p id="user-email">user@example.com</p>
+            <button class="signout-btn" id="signOutBtn">Sign Out</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: support@becslearning.com</p>
+                <p>Phone: +1 (123) 456-7890</p>
+                <p>Address: 123 Tech Lane, EdTech City</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="./student-landing.html">Dashboard</a>
+                <a href="./purchase.html">Purchased Courses</a>
+                <a href="./contact-us.html">Contact Us</a>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 BECS Learning Platform. All rights reserved.
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyB5Ur6-mq9uE4fU0HOaQQhKk3nayTiQCfk",
+            authDomain: "becs-370ab.firebaseapp.com",
+            projectId: "becs-370ab",
+            storageBucket: "becs-370ab.firebasestorage.app",
+            messagingSenderId: "265733015540",
+            appId: "1:265733015540:web:fddcee2dc226ad9be85ba1",
+            measurementId: "G-0ECNR1HQLM"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // DOM Elements
+        const nameEl = document.getElementById('user-name');
+        const emailEl = document.getElementById('user-email');
+        const signOutBtn = document.getElementById('signOutBtn');
+        const loadingEl = document.getElementById('loading');
+        const contentEl = document.getElementById('content');
+        const notification = document.getElementById('notification');
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        const contactForm = document.getElementById('contact-form');
+        const submitContact = document.getElementById('submit-contact');
+
+        // Auth State Listener̦
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                nameEl.textContent = user.displayName || "User";
+                emailEl.textContent = user.email;
+                loadingEl.style.display = "none";
+                contentEl.style.display = "block";
+            } else {
+                window.location.href = "login page.html";
+            }
+        });
+
+        // Sign Out Logic
+        signOutBtn.addEventListener("click", () => {
+            signOut(auth)
+                .then(() => {
+                    window.location.href = "login page.html";
+                })
+                .catch((error) => {
+                    showNotification("Error signing out: " + error.message, 'error');
+                });
+        });
+            contactForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    submitContact.disabled = true;
+
+    // Get form values
+    const formData = {
+        name: document.getElementById('contact-Fullname').value.trim(),
+        email: document.getElementById('contact-Email').value.trim(),
+        subject: document.getElementById('contact-Subject').value.trim(),
+        message: document.getElementById('contact-message').value.trim()
+    };
+
+    // Validation (keep your existing validation logic)
+
+    // Send data to Apps Script
+    fetch(contactForm.action, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams(formData).toString()
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.result === "success") {
+            showNotification('Message sent successfully!', 'success');
+            contactForm.reset();
+        } else {
+            throw new Error(data.error || 'Unknown error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Failed to send message: ' + error.message, 'error');
+    })
+    .finally(() => {
+        submitContact.disabled = false;
+    });
+});
+        // Show notification function
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Validate email format
+        function isValidEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        // Toggle mobile menu
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            hamburger.innerHTML = navMenu.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        // Close menu when clicking outside
+        window.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+
+        // Handle contact form submission
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            submitContact.disabled = true;
+
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const subject = document.getElementById('contact-subject').value.trim();
+            const message = document.getElementById('contact-message').value.trim();
+
+            if (name.length < 2) {
+                showNotification('Name must be at least 2 characters long.', 'error');
+                submitContact.disabled = false;
+                return;
+            }
+            if (!isValidEmail(email)) {
+                showNotification('Please enter a valid email address.', 'error');
+                submitContact.disabled = false;
+                return;
+            }
+            if (subject.length < 3) {
+                showNotification('Subject must be at least 3 characters long.', 'error');
+                submitContact.disabled = false;
+                return;
+            }
+            if (message.length < 10) {
+                showNotification('Message must be at least 10 characters long.', 'error');
+                submitContact.disabled = false;
+                return;
+            }
+
+            // Simulate form submission
+            console.log('Contact Form Submitted:', { name, email, subject, message });
+            showNotification('Your message has been sent successfully!', 'success');
+            contactForm.reset();
+            submitContact.disabled = false;
+        });
+
+        // Highlight active nav link
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                navMenu.classList.remove('active');
+                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+                window.location.href = this.href;
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BECS Learning Platform - Course Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #F5F5F5;
+            color: #333333;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background: #FFFFFF;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .logo span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #D32F2F;
+        }
+
+        .profile-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 12px rgba(211, 47, 47, 0.4);
+        }
+
+        /* Profile Dropdown Styles */
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 80px;
+            right: 40px;
+            background: #FFFFFF;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            z-index: 1000;
+        }
+
+        .profile-dropdown h3 {
+            font-size: 1.4rem;
+            color: #333333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .profile-dropdown form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .profile-dropdown label {
+            font-size: 1rem;
+            color: #666666;
+            margin-bottom: 5px;
+        }
+
+        .profile-dropdown input {
+            background: #F5F5F5;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            color: #333333;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .profile-dropdown input:focus {
+            border-color: #D32F2F;
+        }
+
+        .profile-dropdown .dropdown-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .profile-dropdown button {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-dropdown button:disabled {
+            background: #B0B0B0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .profile-dropdown button.cancel {
+            background: #E0E0E0;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            color: #333333;
+        }
+
+        .profile-dropdown button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(211, 47, 47, 0.4);
+        }
+
+        .profile-dropdown button.cancel:hover {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            border-color: #D32F2F;
+            color: #FFFFFF;
+        }
+
+        .profile-dropdown button:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 3px 6px rgba(211, 47, 47, 0.3);
+        }
+
+        /* Notification Styles */
+        .notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #FFFFFF;
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            color: #333333;
+            font-size: 1rem;
+            z-index: 1001;
+        }
+
+        .notification.success {
+            border-color: #D32F2F;
+            background: #F5F5F5;
+        }
+
+        .notification.error {
+            border-color: #FF6F61;
+            background: #FFF5F5;
+        }
+
+        /* Main Content Styles */
+        .course-access-section {
+            padding: 50px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .course-access-section h2 {
+            font-size: 2.8rem;
+            font-weight: 500;
+            margin-bottom: 40px;
+            color: #333333;
+            text-align: center;
+            letter-spacing: 1.2px;
+        }
+
+        .access-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .access-card {
+            background: #FFFFFF;
+            padding: 35px;
+            border-radius: 20px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(-60px);
+            animation: slideDown 0.6s ease forwards;
+        }
+
+        /* Up-to-down animation */
+        @keyframes slideDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-60px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Delay animation for each card */
+        .access-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .access-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .access-card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .access-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(211, 47, 47, 0.3);
+            border-color: #D32F2F;
+        }
+
+        .access-card svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 8px rgba(211, 47, 47, 0.2));
+        }
+
+        .access-card h3 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #333333;
+            margin-bottom: 15px;
+        }
+
+        .access-card p {
+            font-size: 1rem;
+            color: #666666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .access-button {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .access-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 15px rgba(211, 47, 47, 0.4);
+        }
+
+        .access-button:active {
+            background: #FF8A80;
+            transform: translateY(0);
+            box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: #FFFFFF;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(211, 47, 47, 0.2);
+            color: #666666;
+            text-align: center;
+        }
+
+        .footer .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .footer .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #D32F2F;
+            margin-bottom: 15px;
+        }
+
+        .footer p,
+        .footer a {
+            font-size: 0.9rem;
+            color: #666666;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .footer a:hover {
+            color: #D32F2F;
+        }
+
+        .footer .social-icons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .footer .social-icons a {
+            font-size: 1.2rem;
+            color: #D32F2F;
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-icons a:hover {
+            color: #FF6F61;
+        }
+
+        .footer .copyright {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #999999;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .header .logo span {
+                font-size: 1.2rem;
+            }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .profile-dropdown {
+                top: 70px;
+                right: 20px;
+                width: 90%;
+                max-width: 280px;
+                padding: 20px;
+            }
+
+            .profile-dropdown h3 {
+                font-size: 1.2rem;
+            }
+
+            .profile-dropdown input {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+            .profile-dropdown button {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .notification {
+                top: 10px;
+                right: 10px;
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .course-access-section {
+                padding: 30px 15px;
+            }
+
+            .course-access-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .access-card {
+                padding: 25px;
+            }
+
+            .access-card svg {
+                width: 60px;
+                height: 60px;
+            }
+
+            .access-card h3 {
+                font-size: 1.6rem;
+            }
+
+            .access-card p {
+                font-size: 0.9rem;
+            }
+
+            .access-button {
+                padding: 10px 25px;
+                font-size: 1rem;
+            }
+
+            .footer .footer-content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer .footer-section {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <span>BECS Lecture Platform</span>
+        </div>
+        <div class="profile-icon" id="profile-icon">S</div>
+        <div class="profile-dropdown" id="profile-dropdown">
+            <h3>Update Profile</h3>
+            <form id="profile-form">
+                <label for="profile-name">Name</label>
+                <input type="text" id="profile-name" value="Student Name" required>
+                <label for="profile-email">Email</label>
+                <input type="email" id="profile-email" value="student@example.com" required>
+                <label for="profile-password">Password</label>
+                <input type="password" id="profile-password" placeholder="Enter new password">
+                <div class="dropdown-buttons">
+                    <button type="submit" id="save-profile">Save</button>
+                    <button type="button" class="cancel" id="cancel-profile">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </header>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <section class="course-access-section">
+        <h2 id="course-title">Course Access</h2>
+        <div class="access-options">
+            <div class="access-card">
+                <svg viewBox="0 0 100 100" fill="none" stroke="#D32F2F" stroke-width="2">
+                    <circle cx="50" cy="50" r="40" />
+                    <path d="M35 50 L65 50 M50 35 L50 65" />
+                    <circle cx="35" cy="35" r="5" fill="#D32F2F" />
+                    <circle cx="65" cy="65" r="5" fill="#D32F2F" />
+                </svg>
+                <h3>Live Lecture</h3>
+                <p>Join live sessions with expert instructors and interact in real-time.</p>
+                <a href="./live lecture.html" class="access-button">Access Live Lecture</a>
+            </div>
+            <div class="access-card">
+                <svg viewBox="0 0 100 100" fill="none" stroke="#D32F2F" stroke-width="2">
+                    <rect x="20" y="20" width="60" height="60" rx="10" />
+                    <path d="M40 40 L60 50 L40 60 Z" fill="#D32F2F" />
+                </svg>
+                <h3>Recorded Lecture</h3>
+                <p>Watch recorded lectures at your own pace, anytime, anywhere.</p>
+                <a href="./recorded lecture list.html" class="access-button">Access Recorded Lecture</a>
+            </div>
+            <div class="access-card">
+                <svg viewBox="0 0 100 100" fill="none" stroke="#D32F2F" stroke-width="2">
+                    <rect x="25" y="20" width="50" height="60" rx="5" />
+                    <path d="M35 30 H65 M35 45 H65 M35 60 H65" />
+                    <circle cx="50" cy="45" r="3" fill="#D32F2F" />
+                </svg>
+                <h3>Notes Section</h3>
+                <p>Access comprehensive course notes and study materials.</p>
+                <a href="./notes page.html" class="access-button">Access Notes</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: support@becslearning.com</p>
+                <p>Phone: +1 (123) 456-7890</p>
+                <p>Address: 123 Tech Lane, Innovation City</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="./student-landing.html">Dashboard</a>
+                <a href="./purchased-courses.html">Purchased Courses</a>
+                <a href="./support.html">Support</a>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 BECS Learning Platform. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Mock student data (replace with actual user data from backend)
+        const student = {
+            name: "Student Name",
+            email: "student@example.com",
+            purchasedCourses: []
+        };
+
+        // Mock course data (replace with actual course data from backend)
+        const courses = [
+            {
+                id: "1",
+                title: "Introduction to Circuit Design",
+                description: "Learn the fundamentals of circuit design, including components, schematics, and simulations.",
+                price: "$49.99"
+            },
+            {
+                id: "2",
+                title: "Embedded Systems Programming",
+                description: "Master programming microcontrollers for real-world applications and IoT projects.",
+                price: "$59.99"
+            },
+            {
+                id: "3",
+                title: "Advanced IoT Applications",
+                description: "Explore advanced IoT concepts, including sensor integration and cloud connectivity.",
+                price: "$69.99"
+            }
+        ];
+
+        // Initialize profile icon and dropdown
+        const profileIcon = document.getElementById('profile-icon');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const profileForm = document.getElementById('profile-form');
+        const saveButton = document.getElementById('save-profile');
+        const cancelProfile = document.getElementById('cancel-profile');
+        const notification = document.getElementById('notification');
+
+        profileIcon.textContent = student.name.charAt(0).toUpperCase();
+
+        // Toggle dropdown on profile icon click
+        profileIcon.addEventListener('click', () => {
+            profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+            document.getElementById('profile-name').value = student.name;
+            document.getElementById('profile-email').value = student.email;
+            document.getElementById('profile-password').value = '';
+            notification.style.display = 'none';
+        });
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', (e) => {
+            if (!profileIcon.contains(e.target) && !profileDropdown.contains(e.target)) {
+                profileDropdown.style.display = 'none';
+                notification.style.display = 'none';
+            }
+        });
+
+        // Show notification
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Validate email format
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Handle profile form submission
+        function handleProfileSubmit(e) {
+            e.preventDefault();
+            saveButton.disabled = true;
+
+            const newName = document.getElementById('profile-name').value.trim();
+            const newEmail = document.getElementById('profile-email').value.trim();
+            const newPassword = document.getElementById('profile-password').value.trim();
+
+            // Validate inputs
+            if (newName.length < 2) {
+                showNotification('Name must be at least 2 characters long.', 'error');
+                saveButton.disabled = false;
+                return;
+            }
+            if (!isValidEmail(newEmail)) {
+                showNotification('Please enter a valid email address.', 'error');
+                saveButton.disabled = false;
+                return;
+            }
+            if (newPassword && newPassword.length < 6) {
+                showNotification('Password must be at least 6 characters long.', 'error');
+                saveButton.disabled = false;
+                return;
+            }
+
+            // Simulate profile update (replace with backend API call)
+            student.name = newName;
+            student.email = newEmail;
+            if (newPassword) {
+                console.log('Password updated (mock):', newPassword);
+            }
+            profileIcon.textContent = newName.charAt(0).toUpperCase();
+            showNotification('Profile updated successfully!', 'success');
+            profileDropdown.style.display = 'none';
+            saveButton.disabled = false;
+        }
+
+        profileForm.addEventListener('submit', handleProfileSubmit);
+        saveButton.addEventListener('click', () => {
+            profileForm.dispatchEvent(new Event('submit'));
+        });
+
+        // Close dropdown on cancel
+        cancelProfile.addEventListener('click', () => {
+            profileDropdown.style.display = 'none';
+            notification.style.display = 'none';
+        });
+
+        // Load course title based on URL parameter
+        function loadCourseTitle() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const courseId = urlParams.get('course');
+            const course = courses.find(c => c.id === courseId);
+            if (course) {
+                document.getElementById('course-title').textContent = `${course.title} - Access Options`;
+            } else {
+                document.getElementById('course-title').textContent = 'Course Access';
+            }
+        }
+
+        // Trigger animation when cards enter viewport
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'slideDown 0.6s ease forwards';
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.access-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Initialize page
+        loadCourseTitle();
+    </script>
+</body>
+
+</html>

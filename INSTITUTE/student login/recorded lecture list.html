@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BECS Learning Platform - Recorded Lectures</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQov1cwx4OnYxTxve5UMg5GT6Px2q2Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #F5F5F5;
+            color: #333333;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background: #FFFFFF;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .logo span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #D32F2F;
+        }
+
+        .profile-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 12px rgba(211, 47, 47, 0.4);
+        }
+
+        /* Profile Dropdown Styles */
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 80px;
+            right: 40px;
+            background: #FFFFFF;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            z-index: 1000;
+        }
+
+        .profile-dropdown h3 {
+            font-size: 1.4rem;
+            color: #333333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .profile-dropdown form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .profile-dropdown label {
+            font-size: 1rem;
+            color: #666666;
+            margin-bottom: 5px;
+        }
+
+        .profile-dropdown input {
+            background: #F5F5F5;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            color: #333333;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .profile-dropdown input:focus {
+            border-color: #D32F2F;
+        }
+
+        .profile-dropdown .dropdown-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .profile-dropdown button {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-dropdown button:disabled {
+            background: #B0B0B0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .profile-dropdown button.cancel {
+            background: #E0E0E0;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            color: #333333;
+        }
+
+        .profile-dropdown button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(211, 47, 47, 0.4);
+        }
+
+        .profile-dropdown button.cancel:hover {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            border-color: #D32F2F;
+            color: #FFFFFF;
+        }
+
+        .profile-dropdown button:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 3px 6px rgba(211, 47, 47, 0.3);
+        }
+
+        /* Notification Styles */
+        .notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #FFFFFF;
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            color: #333333;
+            font-size: 1rem;
+            z-index: 1001;
+        }
+
+        .notification.success {
+            border-color: #D32F2F;
+            background: #F5F5F5;
+        }
+
+        .notification.error {
+            border-color: #FF6F61;
+            background: #FFF5F5;
+        }
+
+        /* Recorded Lecture Section Styles */
+        .recorded-lecture-section {
+            padding: 50px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .recorded-lecture-section h2 {
+            font-size: 2.8rem;
+            font-weight: 500;
+            margin-bottom: 40px;
+            color: #333333;
+            text-align: center;
+            letter-spacing: 1.2px;
+        }
+
+        .chapter-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .chapter-card {
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            opacity: 0;
+            transform: translateY(-60px);
+            animation: slideDown 0.6s ease forwards;
+        }
+
+        /* Up-to-down animation */
+        @keyframes slideDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-60px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Delay animation for each card */
+        .chapter-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .chapter-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .chapter-card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .chapter-card:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
+        .chapter-card:nth-child(5) {
+            animation-delay: 1.0s;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(211, 47, 47, 0.3);
+            border-color: #D32F2F;
+        }
+
+        .chapter-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .chapter-info svg {
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(0 4px 8px rgba(211, 47, 47, 0.2));
+        }
+
+        .chapter-details {
+            flex: 1;
+        }
+
+        .chapter-details h3 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #333333;
+            margin-bottom: 5px;
+        }
+
+        .chapter-details p {
+            font-size: 0.9rem;
+            color: #666666;
+        }
+
+        .chapter-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .play-button {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .play-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 15px rgba(211, 47, 47, 0.4);
+        }
+
+        .play-button:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: #FFFFFF;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(211, 47, 47, 0.2);
+            color: #666666;
+            text-align: center;
+        }
+
+        .footer .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .footer .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #D32F2F;
+            margin-bottom: 15px;
+        }
+
+        .footer p,
+        .footer a:not(.social-icons a) {
+            font-size: 0.9rem;
+            color: #666666;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .footer a:not(.social-icons a):hover {
+            color: #D32F2F;
+        }
+
+        .footer .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .footer .social-icons a {
+            font-size: 1.8rem;
+            color: #D32F2F;
+            transition: color 0.3s ease, transform 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(211, 47, 47, 0.1);
+            text-decoration: none;
+            line-height: 1;
+        }
+
+        .footer .social-icons a:hover {
+            color: #FF6F61;
+            transform: scale(1.2);
+            background: rgba(211, 47, 47, 0.2);
+        }
+
+        .footer .social-icons a i {
+            display: inline-block;
+            text-align: center;
+        }
+
+        .footer .social-icons a svg {
+            width: 24px;
+            height: 24px;
+            fill: #D32F2F;
+        }
+
+        .footer .social-icons a:hover svg {
+            fill: #FF6F61;
+        }
+
+        .footer .copyright {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #999999;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .header .logo span {
+                font-size: 1.2rem;
+            }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .profile-dropdown {
+                top: 70px;
+                right: 20px;
+                width: 90%;
+                max-width: 280px;
+                padding: 20px;
+            }
+
+            .profile-dropdown h3 {
+                font-size: 1.2rem;
+            }
+
+            .profile-dropdown input {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+            .profile-dropdown button {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .notification {
+                top: 10px;
+                right: 10px;
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .recorded-lecture-section {
+                padding: 30px 15px;
+            }
+
+            .recorded-lecture-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .chapter-card {
+                padding: 15px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .chapter-info {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+            }
+
+            .chapter-info svg {
+                width: 30px;
+                height: 30px;
+            }
+
+            .chapter-details h3 {
+                font-size: 1.4rem;
+            }
+
+            .chapter-details p {
+                font-size: 0.8rem;
+            }
+
+            .chapter-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .play-button {
+                padding: 8px 15px;
+                font-size: 0.8rem;
+            }
+
+            .footer .footer-content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer .footer-section {
+                text-align: center;
+            }
+
+            .footer .social-icons a {
+                font-size: 1.5rem;
+                width: 40px;
+                height: 40px;
+            }
+
+            .footer .social-icons a svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <span>BECS Learning Platform</span>
+        </div>
+        <div class="profile-icon" id="profile-icon">S</div>
+        <div class="profile-dropdown" id="profile-dropdown">
+            <h3>Update Profile</h3>
+            <form id="profile-form">
+                <label for="profile-name">Name</label>
+                <input type="text" id="profile-name" value="Student Name" required>
+                <label for="profile-email">Email</label>
+                <input type="email" id="profile-email" value="student@example.com" required>
+                <label for="profile-password">Password</label>
+                <input type="password" id="profile-password" placeholder="Enter new password">
+                <div class="dropdown-buttons">
+                    <button type="submit" id="save-profile">Save</button>
+                    <button type="button" class="cancel" id="cancel-profile">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </header>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <section class="recorded-lecture-section">
+        <h2 id="course-title">Introduction to Circuit Design - Recorded Lectures</h2>
+        <div class="chapter-list" id="chapter-list">
+            <!-- Chapters will be dynamically populated -->
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: support@becslearning.com</p>
+                <p>Phone: +1 (123) 456-7890</p>
+                <p>Address: 123 Tech Lane, Innovation City</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://facebook.com" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="./student-landing.html">Dashboard</a>
+                <a href="./purchased-courses.html">Purchased Courses</a>
+                <a href="./support.html">Support</a>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 BECS Learning Platform. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Fallback for Font Awesome loading issues
+        function checkFontAwesome() {
+            return new Promise((resolve) => {
+                const check = () => {
+                    const icon = document.createElement('i');
+                    icon.className = 'fas fa-check';
+                    icon.style.position = 'absolute';
+                    icon.style.visibility = 'hidden';
+                    document.body.appendChild(icon);
+                    const fontFamily = getComputedStyle(icon).fontFamily;
+                    document.body.removeChild(icon);
+                    if (fontFamily.includes('Font Awesome') || fontFamily.includes('FontAwesome')) {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                };
+
+                // Wait for CSS to load
+                const link = document.querySelector('link[href*="font-awesome"]');
+                if (link && link.sheet) {
+                    check();
+                } else {
+                    // Fallback if link.sheet is not available
+                    setTimeout(check, 200);
+                }
+            });
+        }
+
+        // Apply fallback SVGs if Font Awesome fails to load
+        function applyFontAwesomeFallback() {
+            console.warn('Font Awesome failed to load, applying fallback styles');
+            document.querySelectorAll('.social-icons a').forEach(link => {
+                const title = link.getAttribute('title');
+                let svg = '';
+                switch (title) {
+                    case 'Facebook':
+                        svg = `<svg viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" fill="currentColor"/></svg>`;
+                        break;
+                    case 'Twitter':
+                        svg = `<svg viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05-.78-.83-1.9-1.35-3.13-1.35-2.37 0-4.29 1.92-4.29 4.29 0 .34.04.67.11 1-3.56-.18-6.72-1.89-8.84-4.48-.37.63-.58 1.37-.58 2.15 0 1.49.76 2.81 1.91 3.58-.7-.02-1.36-.22-1.94-.55v.05c0 2.08 1.48 3.82 3.44 4.21-.36.1-.74.15-1.13.15-.28 0-.55-.03-.81-.08.55 1.72 2.14 2.97 4.03 3.01-1.48 1.16-3.34 1.85-5.36 1.85-.35 0-.69-.02-1.03-.07 1.91 1.23 4.18 1.94 6.62 1.94 7.94 0 12.29-6.58 12.29-12.29 0-.19 0-.37-.01-.56.84-.61 1.57-1.37 2.15-2.24z" fill="currentColor"/></svg>`;
+                        break;
+                    case 'LinkedIn':
+                        svg = `<svg viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z" fill="currentColor"/></svg>`;
+                        break;
+                    case 'Instagram':
+                        svg = `<svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.982-6.98.058-1.281.072-1.689.072-4.948 0-3.259-.014-3.667-.072-4.947-.2-4.354-2.617-6.779-6.98-6.981-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" fill="currentColor"/></svg>`;
+                        break;
+                    case 'YouTube':
+                        svg = `<svg viewBox="0 0 24 24"><path d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81zM10 15.5v-7l6 3.5-6 3.5z" fill="currentColor"/></svg>`;
+                        break;
+                }
+                link.innerHTML = svg;
+            });
+        }
+
+        // Mock student data (replace with actual user data from backend)
+        const student = {
+            name: "Student Name",
+            email: "student@example.com",
+            purchasedCourses: []
+        };
+
+        // Mock course data with static demo lecture names
+        const course = {
+            id: "1",
+            title: "Introduction to Circuit Design",
+            chapters: [
+                { id: "1-1", title: "Chapter 1: Understanding Voltage and Current", duration: "45 min", url: "https://via.placeholder.com/sample-video1.mp4" },
+                { id: "1-2", title: "Chapter 2: Ohm's Law and Resistor Networks", duration: "60 min", url: "https://via.placeholder.com/sample-video2.mp4" },
+                { id: "1-3", title: "Chapter 3: Capacitors and Inductors Basics", duration: "50 min", url: "https://via.placeholder.com/sample-video3.mp4" },
+                { id: "1-4", title: "Chapter 4: Introduction to Circuit Simulation", duration: "55 min", url: "https://via.placeholder.com/sample-video4.mp4" },
+                { id: "1-5", title: "Chapter 5: Building Simple Circuits", duration: "40 min", url: "https://via.placeholder.com/sample-video5.mp4" }
+            ]
+        };
+
+        // Initialize profile icon and dropdown
+        const profileIcon = document.getElementById('profile-icon');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const profileForm = document.getElementById('profile-form');
+        const saveButton = document.getElementById('save-profile');
+        const cancelProfile = document.getElementById('cancel-profile');
+        const notification = document.getElementById('notification');
+
+        profileIcon.textContent = student.name.charAt(0).toUpperCase();
+
+        // Toggle dropdown on profile icon click
+        profileIcon.addEventListener('click', () => {
+            profileDropdown.style.display = profileDropdown.style.display === 'block' ? 'none' : 'block';
+            document.getElementById('profile-name').value = student.name;
+            document.getElementById('profile-email').value = student.email;
+            document.getElementById('profile-password').value = '';
+            notification.style.display = 'none';
+        });
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', (e) => {
+            if (!profileIcon.contains(e.target) && !profileDropdown.contains(e.target)) {
+                profileDropdown.style.display = 'none';
+                notification.style.display = 'none';
+            }
+        });
+
+        // Show notification
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Validate email format
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Handle profile form submission
+        function handleProfileSubmit(e) {
+            e.preventDefault();
+            saveButton.disabled = true;
+
+            const newName = document.getElementById('profile-name').value.trim();
+            const newEmail = document.getElementById('profile-email').value.trim();
+            const newPassword = document.getElementById('profile-password').value.trim();
+
+            // Validate inputs
+            if (newName.length < 2) {
+                showNotification('Name must be at least 2 characters long.', 'error');
+                saveButton.disabled = false;
+                return;
+            }
+            if (!isValidEmail(newEmail)) {
+                showNotification('Please enter a valid email address.', 'error');
+                saveButton.disabled = false;
+                return;
+            }
+            if (newPassword && newPassword.length < 6) {
+                showNotification('Password must be at least 6 characters long.', 'error');
+                saveButton.disabled = false;
+                return;
+            }
+
+            // Simulate profile update (replace with backend API call)
+            student.name = newName;
+            student.email = newEmail;
+            if (newPassword) {
+                console.log('Password updated (mock):', newPassword);
+            }
+            profileIcon.textContent = newName.charAt(0).toUpperCase();
+            showNotification('Profile updated successfully!', 'success');
+            profileDropdown.style.display = 'none';
+            saveButton.disabled = false;
+        }
+
+        profileForm.addEventListener('submit', handleProfileSubmit);
+        saveButton.addEventListener('click', () => {
+            profileForm.dispatchEvent(new Event('submit'));
+        });
+
+        // Close dropdown on cancel
+        cancelProfile.addEventListener('click', () => {
+            profileDropdown.style.display = 'none';
+            notification.style.display = 'none';
+        });
+
+        // Load chapters
+        function loadCourseContent() {
+            const chapterList = document.getElementById('chapter-list');
+            chapterList.innerHTML = course.chapters.map(chapter => `
+                <div class="chapter-card" data-chapter-id="${chapter.id}">
+                    <div class="chapter-info">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#D32F2F" stroke-width="1.5">
+                            <path d="M5 3v18l14-9L5 3z" fill="#D32F2F" />
+                        </svg>
+                        <div class="chapter-details">
+                            <h3>${chapter.title}</h3>
+                            <p>Duration: ${chapter.duration}</p>
+                        </div>
+                    </div>
+                    <div class="chapter-actions">
+                        <a href="recorded screen.html?course=${course.id}&chapter=${chapter.id}" class="play-button">
+                            <i class="fas fa-arrow-right"></i> View
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+            // Trigger animation for chapter cards
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'slideDown 0.6s ease forwards';
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            document.querySelectorAll('.chapter-card').forEach(card => {
+                observer.observe(card);
+            });
+        }
+
+        // Check Font Awesome load and load chapters after DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            checkFontAwesome().then(loaded => {
+                if (!loaded) {
+                    applyFontAwesomeFallback();
+                }
+            });
+            loadCourseContent();
+        });
+    </script>
+</body>
+
+</html>

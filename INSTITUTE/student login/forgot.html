@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BECS Learning Platform - Forgot Password</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #F5F5F5;
+            color: #333333;
+            overflow-x: hidden;
+        }
+
+        .forgot-password-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, #FFFFFF 0%, #E0E0E0 50%, #FFFFFF 100%);
+            animation: gradientShift 15s ease-in-out infinite;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+
+            0%,
+            100% {
+                background: linear-gradient(135deg, #FFFFFF 0%, #E0E0E0 50%, #FFFFFF 100%);
+            }
+
+            50% {
+                background: linear-gradient(135deg, #E0E0E0 0%, #FFFFFF 50%, #E0E0E0 100%);
+            }
+        }
+
+        .forgot-password-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 10% 20%, rgba(211, 47, 47, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 111, 97, 0.2) 0%, transparent 40%);
+            animation: pulseGlow 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                opacity: 0.2;
+            }
+
+            100% {
+                opacity: 0.5;
+            }
+        }
+
+        .forgot-password-container {
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px;
+            background: #FFFFFF;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1.2s ease-out;
+            z-index: 2;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .forgot-password-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(211, 47, 47, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .forgot-password-container:hover::before {
+            left: 100%;
+        }
+
+        .forgot-password-container:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(211, 47, 47, 0.2);
+            border-color: #D32F2F;
+        }
+
+        .forgot-password-container h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #333333;
+            text-shadow: 0 0 10px rgba(211, 47, 47, 0.2);
+        }
+
+        .role-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .role-tab {
+            background: #E0E0E0;
+            color: #333333;
+            padding: 10px 20px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .role-tab.active {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            border-color: #D32F2F;
+        }
+
+        .role-tab:hover {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+        }
+
+        .forgot-password-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-group {
+            position: relative;
+            text-align: left;
+        }
+
+        .input-group i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #D32F2F;
+            font-size: 1.1rem;
+        }
+
+        .forgot-password-form input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            border-radius: 8px;
+            background: #F5F5F5;
+            color: #333333;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password-form input:focus {
+            border-color: #D32F2F;
+            box-shadow: 0 0 8px rgba(211, 47, 47, 0.3);
+        }
+
+        .reset-button {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+        }
+
+        .reset-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s ease, height 0.5s ease;
+        }
+
+        .reset-button:hover::before {
+            width: 200px;
+            height: 200px;
+        }
+
+        .reset-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(211, 47, 47, 0.4);
+        }
+
+        .reset-button:active {
+            background: #FF8A80;
+            transform: translateY(0);
+            box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+        }
+
+        .login-link {
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .login-link a {
+            color: #D32F2F;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #FF6F61;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .forgot-password-container {
+                padding: 20px;
+            }
+
+            .forgot-password-container h2 {
+                font-size: 1.8rem;
+            }
+
+            .role-tab {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .forgot-password-form input {
+                padding: 10px 10px 10px 35px;
+                font-size: 0.9rem;
+            }
+
+            .reset-button {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            .login-link {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="forgot-password-section">
+        <div class="forgot-password-container">
+            <h2>Forgot Password</h2>
+            <div class="role-tabs">
+                <button class="role-tab active" data-role="student">Student</button>
+                <button class="role-tab" data-role="teacher">Teacher</button>
+            </div>
+            <form class="forgot-password-form">
+                <input type="hidden" name="role" value="student">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <button type="submit" class="reset-button">Reset Password (Student)</button>
+            </form>
+            <div class="login-link">
+                <a href="./login.html">Back to Log In</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Role Tab Switching
+        const roleTabs = document.querySelectorAll('.role-tab');
+        const roleInput = document.querySelector('input[name="role"]');
+        const resetButton = document.querySelector('.reset-button');
+
+        roleTabs.forEach(tab => {
+            tab.addEventListener('click', function () {
+                roleTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                roleInput.value = this.dataset.role;
+                resetButton.textContent = `Reset Password (${this.dataset.role.charAt(0).toUpperCase() + this.dataset.role.slice(1)})`;
+            });
+        });
+
+        // Form Submission Handling
+        document.querySelector('.forgot-password-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            const role = roleInput.value;
+
+            // Placeholder for password reset logic (to be replaced with actual backend API call)
+            console.log('Password Reset Request:', { email, role });
+            alert(`Password reset request sent for ${role}: ${email}`);
+
+            // Redirect to login page after request
+            window.location.href = './login.html';
+        });
+    </script>
+</body>
+
+</html>

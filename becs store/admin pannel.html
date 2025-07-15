@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #f4f4f4;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #333;
+            color: #fff;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar ul li:hover, .sidebar ul li.active {
+            background: #d32f2f;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+
+        .section {
+            display: none;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .card h4 {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .card p {
+            font-size: 1.5rem;
+            color: #d32f2f;
+        }
+
+        .chart-container {
+            max-width: 600px;
+            margin: 30px 0;
+        }
+
+        .filter-section {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-section select, .filter-section input, .filter-section button {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        .filter-section button {
+            background: #d32f2f;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .filter-section button:hover {
+            background: #b71c1c;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #d32f2f;
+            color: #fff;
+        }
+
+        .status-select {
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .btn-action {
+            padding: 5px 10px;
+            background: #d32f2f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-action:hover {
+            background: #b71c1c;
+        }
+
+        .top-products, .customer-stats {
+            margin-top: 30px;
+        }
+
+        .top-products ul, .customer-stats ul {
+            list-style: none;
+        }
+
+        .top-products li, .customer-stats li {
+            padding: 10px;
+            background: #f9f9f9;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+                width: calc(100% - 200px);
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <ul>
+            <li data-section="dashboard" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></li>
+            <li data-section="orders"><i class="fas fa-shopping-cart"></i> <span>Orders</span></li>
+            <li data-section="queries"><i class="fas fa-question-circle"></i> <span>Queries</span></li>
+            <li data-section="logout"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="section active" id="dashboard">
+            <h3>Dashboard</h3>
+            <div class="filter-section">
+                <select id="monthFilter">
+                    <option value="0">Select Month</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+                <select id="yearFilter">
+                    <option value="0">Select Year</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                </select>
+                <input type="file" id="electronicsFileInput" accept=".xlsx, .xls, .csv" />
+                <button onclick="importExcel('electronics')">Import Electronics Products</button>
+                <input type="file" id="electricalFileInput" accept=".xlsx, .xls, .csv" />
+                <button onclick="importExcel('electrical')">Import Electrical Products</button>
+                <button onclick="exportData()">Export Data</button>
+            </div>
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h4>Total Orders</h4>
+                    <p id="totalOrders">0</p>
+                </div>
+                <div class="card">
+                    <h4>Total Earnings</h4>
+                    <p id="totalEarnings">$0</p>
+                </div>
+                <div class="card">
+                    <h4>Pending Orders</h4>
+                    <p id="pendingOrders">0</p>
+                </div>
+                <div class="card">
+                    <h4>Unresolved Queries</h4>
+                    <p id="unresolvedQueries">0</p>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="orderTrendChart"></canvas>
+            </div>
+            <div class="top-products">
+                <h3>Top Selling Products</h3>
+                <ul id="topProducts"></ul>
+            </div>
+            <div class="customer-stats">
+                <h3>Customer Stats</h3>
+                <ul id="customerStats"></ul>
+            </div>
+        </div>
+
+        <div class="section" id="orders">
+            <h3>Orders</h3>
+            <table id="orderTable">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="section" id="queries">
+            <h3>Customer Queries</h3>
+            <table id="queryTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Query</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Load orders from localStorage or initialize with dummy data
+        let orders = JSON.parse(localStorage.getItem('orders')) || [
+            { id: "ORD001", customer: "John Doe", date: "2025-01-15", amount: 150.50, status: "Pending", product: "Smartphone X", source: "Electronics" },
+            { id: "ORD002", customer: "Jane Smith", date: "2025-02-10", amount: 200.00, status: "Pending", product: "Laptop Pro", source: "Electronics" },
+            { id: "ORD003", customer: "Alice Brown", date: "2025-03-20", amount: 100.00, status: "Shipped", product: "Smartphone X", source: "Electronics" },
+            { id: "ORD004", customer: "Bob Wilson", date: "2025-04-05", amount: 300.75, status: "Delivered", product: "Tablet Z", source: "Electronics" },
+            { id: "ORD005", customer: "Emma Davis", date: "2025-05-12", amount: 175.25, status: "Pending", product: "Smartphone X", source: "Electronics" }
+        ];
+
+        const queries = [
+            { id: 1, name: "Mike Wilson", email: "mike@example.com", query: "Product not working", date: "2025-06-12", status: "pending" },
+            { id: 2, name: "Sarah Lee", email: "sarah@example.com", query: "Delivery delayed", date: "2025-06-05", status: "resolved" },
+            { id: 3, name: "Tom Brown", email: "tom@example.com", query: "Exchange request", date: "2025-06-01", status: "pending" }
+        ];
+
+        const customers = [
+            { id: 1, name: "John Doe", joinDate: "2024-12-01" },
+            { id: 2, name: "Jane Smith", joinDate: "2025-01-15" },
+            { id: 3, name: "Alice Brown", joinDate: "2025-02-20" },
+            { id: 4, name: "Bob Wilson", joinDate: "2025-03-10" },
+            { id: 5, name: "Emma Davis", joinDate: "2025-04-05" }
+        ];
+
+        // Chart initialization
+        let orderChart = null;
+
+        // Sidebar navigation
+        const sidebarItems = document.querySelectorAll('.sidebar ul li');
+        const sections = document.querySelectorAll('.section');
+
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', () => {
+                sidebarItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                const sectionId = item.getAttribute('data-section');
+                sections.forEach(section => section.classList.remove('active'));
+                document.getElementById(sectionId).classList.add('active');
+
+                if (sectionId === 'dashboard') updateDashboard();
+                else if (sectionId === 'orders') updateOrders();
+                else if (sectionId === 'queries') updateQueries();
+                else if (sectionId === 'logout') window.location.href = 'login.html';
+            });
+        });
+
+        // Import Excel file with unique IDs and refresh trigger
+        async function importExcel(shopType) {
+  const fileInput = document.getElementById(shopType === 'electronics' ? 'electronicsFileInput' : 'electricalFileInput');
+  const file = fileInput.files[0];
+  if (!file) {
+    alert(`Please select an Excel file for ${shopType} shop.`);
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    const data = new Uint8Array(e.target.result);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
+    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+    const items = jsonData.map(row => ({
+      name: row['name'] || row['Name'] || '',
+      category: row['category'] || row['Category'] || '',
+      price: parseInt(row['price'] || row['Price'] || 0),
+      imglink: row['imglink'] || row['Image'] || '',
+      description: row['description'] || row['Description'] || '',
+      subcat: row['subcat'] || row['Subcat'] || ''
+    }));
+
+    try {
+      const res = await fetch('http://localhost:3004/api/upload-items', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: shopType, items })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert(`${shopType.charAt(0).toUpperCase() + shopType.slice(1)} products uploaded successfully!`);
+      } else {
+        alert(`Error: ${data.message}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Server error. Please try again later.');
+    }
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+
+
+        // Update dashboard
+        function updateDashboard() {
+            const month = document.getElementById('monthFilter').value;
+            const year = document.getElementById('yearFilter').value;
+            let totalOrders = 0;
+            let totalEarnings = 0;
+            let pendingOrders = 0;
+            let unresolvedQueries = 0;
+
+            const filteredOrders = orders.filter(order => {
+                const orderDate = new Date(order.date);
+                const orderMonth = orderDate.getMonth() + 1;
+                const orderYear = orderDate.getFullYear();
+                return (!month || month == orderMonth) && (!year || year == orderYear);
+            });
+
+            filteredOrders.forEach(order => {
+                totalOrders++;
+                totalEarnings += order.amount;
+                if (order.status === 'Pending') pendingOrders++;
+            });
+
+            queries.forEach(query => {
+                const queryDate = new Date(query.date);
+                const queryMonth = queryDate.getMonth() + 1;
+                const queryYear = queryDate.getFullYear();
+                if (((!month || month == queryMonth) && (!year || year == queryYear)) && query.status === 'pending') {
+                    unresolvedQueries++;
+                }
+            });
+
+            document.getElementById('totalOrders').textContent = totalOrders;
+            document.getElementById('totalEarnings').textContent = `$${totalEarnings.toFixed(2)}`;
+            document.getElementById('pendingOrders').textContent = pendingOrders;
+            document.getElementById('unresolvedQueries').textContent = unresolvedQueries;
+
+            updateOrderChart(filteredOrders);
+            updateTopProducts();
+            updateCustomerStats(month, year);
+        }
+
+        // Update order chart
+        function updateOrderChart(filteredOrders) {
+            const ctx = document.getElementById('orderTrendChart').getContext('2d');
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const orderCounts = new Array(12).fill(0);
+            let totalRevenue = 0;
+
+            filteredOrders.forEach(order => {
+                const orderDate = new Date(order.date);
+                const monthIndex = orderDate.getMonth();
+                orderCounts[monthIndex]++;
+                totalRevenue += order.amount;
+            });
+
+            if (orderChart) {
+                orderChart.destroy();
+            }
+
+            orderChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Orders per Month',
+                        data: orderCounts,
+                        borderColor: '#d32f2f',
+                        backgroundColor: 'rgba(211, 47, 47, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Orders'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        title: {
+                            display: true,
+                            text: `Order Trend ${document.getElementById('yearFilter').value || 'All Years'}`
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update top selling products
+        function updateTopProducts() {
+            const topProductsList = document.getElementById('topProducts');
+            topProductsList.innerHTML = '';
+
+            // Aggregate product sales
+            const productSales = {};
+            orders.forEach(order => {
+                productSales[order.product] = (productSales[order.product] || 0) + 1;
+            });
+
+            // Get electronics and electrical products from localStorage
+            const electronicsProducts = JSON.parse(localStorage.getItem('electronicsProducts') || '[]');
+            const electricalProducts = JSON.parse(localStorage.getItem('electricalProducts') || '[]');
+            const allProducts = [...electronicsProducts, ...electricalProducts];
+
+            // Sort products by sales
+            const sortedProducts = Object.entries(productSales)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5); // Top 5 products
+
+            sortedProducts.forEach(([productName, count]) => {
+                const product = allProducts.find(p => p.name === productName);
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    ${productName} (${product ? product.source : 'Unknown'})
+                    <span>${count} sold - $${product ? (product.price * count).toFixed(2) : 'N/A'}</span>
+                `;
+                topProductsList.appendChild(li);
+            });
+
+            if (sortedProducts.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = 'No sales data available';
+                topProductsList.appendChild(li);
+            }
+        }
+
+        // Update customer stats
+        function updateCustomerStats(month, year) {
+            const customerStatsList = document.getElementById('customerStats');
+            customerStatsList.innerHTML = '';
+
+            const filteredCustomers = customers.filter(customer => {
+                const joinDate = new Date(customer.joinDate);
+                const joinMonth = joinDate.getMonth() + 1;
+                const joinYear = joinDate.getFullYear();
+                return (!month || month == joinMonth) && (!year || year == joinYear);
+            });
+
+            filteredCustomers.forEach(customer => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    ${customer.name} 
+                    <span>Joined: ${customer.joinDate}</span>
+                `;
+                customerStatsList.appendChild(li);
+            });
+
+            if (filteredCustomers.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = 'No customer data for selected period';
+                customerStatsList.appendChild(li);
+            }
+        }
+
+        // Update orders table
+        function updateOrders() {
+            const orderTableBody = document.querySelector('#orderTable tbody');
+            orderTableBody.innerHTML = '';
+
+            const month = document.getElementById('monthFilter').value;
+            const year = document.getElementById('yearFilter').value;
+
+            const filteredOrders = orders.filter(order => {
+                const orderDate = new Date(order.date);
+                const orderMonth = orderDate.getMonth() + 1;
+                const orderYear = orderDate.getFullYear();
+                return (!month || month == orderMonth) && (!year || year == orderYear);
+            });
+
+            filteredOrders.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.id}</td>
+                    <td>${order.customer}</td>
+                    <td>${order.date}</td>
+                    <td>$${order.amount.toFixed(2)}</td>
+                    <td>
+                        <select class="status-select" onchange="updateOrderStatus('${order.id}', this.value)">
+                            <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                            <option value="Shipped" ${order.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
+                            <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                            <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                        </select>
+                    </td>
+                    <td><button class="btn-action" onclick="viewOrderDetails('${order.id}')">View</button></td>
+                `;
+                orderTableBody.appendChild(row);
+            });
+        }
+
+        // Update order status
+        function updateOrderStatus(orderId, newStatus) {
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+                order.status = newStatus;
+                localStorage.setItem('orders', JSON.stringify(orders));
+                updateDashboard();
+                updateOrders();
+                alert(`Order ${orderId} status updated to ${newStatus}`);
+            }
+        }
+
+        // View order details
+        function viewOrderDetails(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            alert(`Order Details:\nID: ${order.id}\nCustomer: ${order.customer}\nDate: ${order.date}\nAmount: $${order.amount.toFixed(2)}\nStatus: ${order.status}\nProduct: ${order.product}\nSource: ${order.source}`);
+        }
+
+        // Update queries table
+        function updateQueries() {
+            const queryTableBody = document.querySelector('#queryTable tbody');
+            queryTableBody.innerHTML = '';
+
+            const month = document.getElementById('monthFilter').value;
+            const year = document.getElementById('yearFilter').value;
+
+            const filteredQueries = queries.filter(query => {
+                const queryDate = new Date(query.date);
+                const queryMonth = queryDate.getMonth() + 1;
+                const queryYear = queryDate.getFullYear();
+                return (!month || month == queryMonth) && (!year || year == queryYear);
+            });
+
+            filteredQueries.forEach(query => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${query.name}</td>
+                    <td>${query.email}</td>
+                    <td>${query.query}</td>
+                    <td>${query.date}</td>
+                `;
+                queryTableBody.appendChild(row);
+            });
+        }
+
+        // Export data to Excel
+        function exportData() {
+            const month = document.getElementById('monthFilter').value;
+            const year = document.getElementById('yearFilter').value;
+
+            const filteredOrders = orders.filter(order => {
+                const orderDate = new Date(order.date);
+                const orderMonth = orderDate.getMonth() + 1;
+                const orderYear = orderDate.getFullYear();
+                return (!month || month == orderMonth) && (!year || year == orderYear);
+            });
+
+            const filteredQueries = queries.filter(query => {
+                const queryDate = new Date(query.date);
+                const queryMonth = queryDate.getMonth() + 1;
+                const queryYear = queryDate.getFullYear();
+                return (!month || month == queryMonth) && (!year || year == queryYear);
+            });
+
+            const workbook = XLSX.utils.book_new();
+
+            // Export orders
+            const orderSheet = XLSX.utils.json_to_sheet(filteredOrders);
+            XLSX.utils.book_append_sheet(workbook, orderSheet, 'Orders');
+
+            // Export queries
+            const querySheet = XLSX.utils.json_to_sheet(filteredQueries);
+            XLSX.utils.book_append_sheet(workbook, querySheet, 'Queries');
+
+            // Export products
+            const electronicsProducts = JSON.parse(localStorage.getItem('electronicsProducts') || '[]');
+            const electricalProducts = JSON.parse(localStorage.getItem('electricalProducts') || '[]');
+            const allProducts = [...electronicsProducts, ...electricalProducts];
+            const productSheet = XLSX.utils.json_to_sheet(allProducts);
+            XLSX.utils.book_append_sheet(workbook, productSheet, 'Products');
+
+            // Export customer stats
+            const filteredCustomers = customers.filter(customer => {
+                const joinDate = new Date(customer.joinDate);
+                const joinMonth = joinDate.getMonth() + 1;
+                const joinYear = joinDate.getFullYear();
+                return (!month || month == joinMonth) && (!year || year == joinYear);
+            });
+            const customerSheet = XLSX.utils.json_to_sheet(filteredCustomers);
+            XLSX.utils.book_append_sheet(workbook, customerSheet, 'Customers');
+
+            // Generate and download Excel file
+            XLSX.writeFile(workbook, `Admin_Data_${year || 'All'}_${month ? months[month - 1] : 'All'}.xlsx`);
+        }
+
+        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDashboard();
+            updateOrders();
+            updateQueries();
+
+            // Add event listeners for filters
+            document.getElementById('monthFilter').addEventListener('change', updateDashboard);
+            document.getElementById('yearFilter').addEventListener('change', updateDashboard);
+        });
+
+        // Array for month names in export
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    </script>
+</body>
+</html>

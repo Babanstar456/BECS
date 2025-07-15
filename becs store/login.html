@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Banerjee Electronics</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap">
+  <style>
+    /* Simplified for brevity — copy your full CSS here exactly */
+    * {margin:0;padding:0;box-sizing:border-box;}
+    :root {
+      --primary-color: #ff0000dc;
+      --secondary-color: #000000;
+      --accent-color: #ffffff;
+      --text-primary: #000000;
+      --text-secondary: #666666;
+      --gradient-primary: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+      --gradient-secondary: linear-gradient(135deg, #000000 0%, #333333 100%);
+    }
+    body {
+      font-family: 'Inter', 'Roboto', Arial, sans-serif;
+      background: radial-gradient(circle at top right, rgba(255, 0, 0, 0.2), transparent 70%), var(--gradient-secondary);
+      min-height: 100vh; display:flex; justify-content:center; align-items:center;
+    }
+    .login-container {
+      background: var(--accent-color);
+      padding:40px; border-radius:20px; max-width:450px; width:90%;
+      box-shadow:0 10px 30px rgba(0,0,0,0.3);
+      border:2px solid var(--primary-color);
+    }
+    .login-header {
+      text-align:center; margin-bottom:30px;
+    }
+    .login-logo {
+      display:flex; align-items:center; justify-content:center; gap:10px;
+    }
+    .login-logo img {height:60px; width:61px;}
+    .login-logo span {font-size:1.8rem; font-weight:bold; color:var(--secondary-color);}
+    .tab-container {
+      display:flex; justify-content:center; margin-bottom:20px;
+    }
+    .tab {
+      flex:1; padding:15px; background:#f5f5f5; text-align:center;
+      font-weight:600; cursor:pointer; border:1px solid var(--primary-color);
+      transition: all 0.3s ease;
+    }
+    .tab.active {
+      background: var(--gradient-primary);
+      color: var(--accent-color);
+      box-shadow: 0 8px 20px rgba(255,0,0,0.3);
+    }
+    .login-form {display:none; flex-direction:column; gap:20px;}
+    .login-form.active {display:flex;}
+    .form-group {position:relative;}
+    .form-group label {font-weight:600; margin-bottom:8px; display:block;}
+    .form-group input {
+      width:100%; padding:12px 40px 12px 15px; border:1px solid var(--primary-color);
+      border-radius:10px; background:rgba(255,255,255,0.8);
+    }
+    .form-group .toggle-password {
+      position:absolute; right:12px; top:50%; transform:translateY(-50%);
+      cursor:pointer; color:var(--primary-color);
+    }
+    .btn-login {
+      background:var(--gradient-primary); color:var(--accent-color);
+      padding:15px; border-radius:25px; font-weight:600; cursor:pointer;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      border:none;
+    }
+    .error-message {
+      color:#cc0000; font-size:0.85rem; margin-top:5px; display:none;
+    }
+    .signup-link {
+      text-align:center; margin-top:20px; font-size:0.9rem; color:var(--text-secondary);
+    }
+    .signup-link a {color:var(--primary-color); text-decoration:none; font-weight:600;}
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <div class="login-logo">
+        <img src="./image/banerjee electronics real logo.jpg" alt="logo">
+        <span>Banerjee Electronics</span>
+      </div>
+    </div>
+
+    <div class="tab-container">
+      <div class="tab customer-tab active" data-target="customer-form"><i class="fas fa-user"></i>Customer</div>
+      <div class="tab admin-tab" data-target="admin-form"><i class="fas fa-user-shield"></i>Admin</div>
+    </div>
+
+    <!-- Customer Login Form -->
+    <form id="customer-form" class="login-form active">
+      <div class="form-group">
+        <label for="customer-email">Email Address</label>
+        <input type="email" id="customer-email" name="email" placeholder="Enter your email" required>
+        <div class="error-message" id="customer-email-error">Please enter a valid email address</div>
+      </div>
+
+      <div class="form-group">
+        <label for="customer-password">Password</label>
+        <input type="password" id="customer-password" name="password" placeholder="Enter your password" required>
+        <i class="fas fa-eye toggle-password" id="customer-toggle-password"></i>
+        <div class="error-message" id="customer-password-error">Password must be at least 6 characters</div>
+        <div class="error-message" id="customer-login-fail">Invalid email or password. Please try again.</div>
+        <div class="error-message" id="customer-not-found">Email not found. Please sign up first.</div>
+      </div>
+
+      <div class="form-options">
+        <label><input type="checkbox" name="remember"> Remember me</label>
+        <a href="./forgot password.html">Forgot Password?</a>
+      </div>
+
+      <button type="submit" class="btn-login">
+        <i class="fas fa-sign-in-alt"></i> Customer Login
+      </button>
+
+      <div class="signup-link">
+        Don't have an account? <a href="./sign up page.html">Sign Up</a>
+      </div>
+    </form>
+
+    <!-- Admin Login Form -->
+    <form id="admin-form" class="login-form">
+      <div class="form-group">
+        <label for="admin-email">Admin Email</label>
+        <input type="email" id="admin-email" name="email" placeholder="Enter admin email" required>
+        <div class="error-message" id="admin-email-error">Please enter a valid email address</div>
+      </div>
+
+      <div class="form-group">
+        <label for="admin-password">Password</label>
+        <input type="password" id="admin-password" name="password" placeholder="Enter admin password" required>
+        <i class="fas fa-eye toggle-password" id="admin-toggle-password"></i>
+        <div class="error-message" id="admin-password-error">Password must be at least 6 characters</div>
+      </div>
+
+      <div class="error-message" id="admin-login-error">Invalid admin credentials. Please try again.</div>
+
+
+      <div class="form-options">
+        <label><input type="checkbox" name="remember"> Remember me</label>
+        <a href="./forgot password.html">Forgot Password?</a>
+      </div>
+
+      <button type="submit" class="btn-login">
+        <i class="fas fa-sign-in-alt"></i> Admin Login
+      </button>
+    </form>
+  </div>
+
+  <script>
+  // Tab switching
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll('.login-form').forEach(form => form.classList.remove('active'));
+      document.getElementById(tab.dataset.target).classList.add('active');
+    });
+  });
+
+  // Toggle password
+  function togglePassword(toggleId, inputId) {
+    document.getElementById(toggleId).addEventListener('click', () => {
+      const input = document.getElementById(inputId);
+      const type = input.type === 'password' ? 'text' : 'password';
+      input.type = type;
+    });
+  }
+  togglePassword('customer-toggle-password', 'customer-password');
+  togglePassword('admin-toggle-password', 'admin-password');
+
+  // CUSTOMER LOGIN HANDLER
+  document.getElementById('customer-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('customer-email').value.trim();
+    const password = document.getElementById('customer-password').value.trim();
+    const emailError = document.getElementById('customer-email-error');
+    const passwordError = document.getElementById('customer-password-error');
+    const loginFail = document.getElementById('customer-login-fail');
+    const notFound = document.getElementById('customer-not-found');
+
+    // Reset all errors
+    [emailError, passwordError, loginFail, notFound].forEach(el => el.style.display = 'none');
+
+    let valid = true;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      emailError.style.display = 'block'; valid = false;
+    }
+    if (password.length < 6) {
+      passwordError.style.display = 'block'; valid = false;
+    }
+    if (!valid) return;
+
+    try {
+      const res = await fetch('http://localhost:3001/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+
+      if (data.status === 'not_found') {
+        notFound.style.display = 'block';
+      }
+      else if (data.status === 'wrong_password') {
+        loginFail.style.display = 'block';
+      }
+      else if (data.status === 'success') {
+        // Store firstName and lastName as well
+        localStorage.setItem('userSession', JSON.stringify({
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          userType: 'customer'
+        }));
+        window.location.href = 'after login.html';
+      }
+      else {
+        loginFail.style.display = 'block';
+      }
+    } catch (err) {
+      console.error(err);
+      loginFail.style.display = 'block';
+    }
+  });
+
+  // ADMIN LOGIN HANDLER
+  // ADMIN LOGIN HANDLER
+  document.getElementById('admin-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('admin-email').value.trim();
+    const password = document.getElementById('admin-password').value.trim();
+    const emailError = document.getElementById('admin-email-error');
+    const passwordError = document.getElementById('admin-password-error');
+    const loginError = document.getElementById('admin-login-error');
+
+    [emailError, passwordError, loginError].forEach(el => el.style.display = 'none');
+
+    let valid = true;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      emailError.style.display = 'block'; valid = false;
+    }
+    if (password.length < 6) {
+      passwordError.style.display = 'block'; valid = false;
+    }
+    if (!valid) return;
+
+    try {
+      const res = await fetch('http://localhost:3001/admin-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem('userSession', JSON.stringify({ email, userType: 'admin' }));
+        window.location.href = 'admin pannel.html';
+      } else {
+        loginError.textContent = data.message || 'Login failed. Please try again.';
+        loginError.style.display = 'block';
+      }
+    } catch (err) {
+      console.error('Error during login:', err);
+      loginError.textContent = 'Server error. Please try again later.';
+      loginError.style.display = 'block';
+    }
+  });
+</script>
+
+</body>
+</html>

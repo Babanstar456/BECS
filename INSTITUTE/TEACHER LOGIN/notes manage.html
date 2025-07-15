@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BECS Learning Platform - Notes Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #F5F5F5;
+            color: #333333;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: #FFFFFF;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .header .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header .logo-text span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #D32F2F;
+        }
+
+        .header .logo-text .tagline {
+            font-size: 0.9rem;
+            color: #666666;
+            font-weight: 300;
+        }
+
+        .header .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header .nav-menu a {
+            color: #333333;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 10px;
+        }
+
+        .header .nav-menu a:hover {
+            color: #D32F2F;
+            transform: translateY(-2px);
+        }
+
+        .header .nav-menu a.active {
+            color: #D32F2F;
+            border-bottom: 3px solid #D32F2F;
+            padding-bottom: 5px;
+        }
+
+        .header .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header .profile-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header .profile-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 12px rgba(211, 47, 47, 0.4);
+        }
+
+        .header .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            color: #333333;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            padding: 10px;
+        }
+
+        .header .hamburger:hover {
+            color: #D32F2F;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #FFFFFF;
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            color: #333333;
+            font-size: 1rem;
+            z-index: 1001;
+            display: none;
+        }
+
+        .notification.success {
+            border-color: #D32F2F;
+            background: #F5F5F5;
+        }
+
+        .notification.error {
+            border-color: #FF6F61;
+            background: #FFF5F5;
+        }
+
+        .notes-section {
+            padding: 50px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .notes-section h2 {
+            font-size: 2.8rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+            color: #333333;
+            text-align: center;
+            letter-spacing: 1.2px;
+        }
+
+        .add-module-form,
+        .add-chapter-form {
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .add-module-form h3,
+        .add-chapter-form h3 {
+            font-size: 1.4rem;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        .add-module-form form,
+        .add-chapter-form form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .add-module-form label,
+        .add-chapter-form label {
+            font-size: 1rem;
+            color: #666666;
+            margin-bottom: 5px;
+        }
+
+        .add-module-form input,
+        .add-chapter-form input {
+            background: #F5F5F5;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            color: #333333;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .add-module-form input:focus,
+        .add-chapter-form input:focus {
+            border-color: #D32F2F;
+            box-shadow: 0 0 8px rgba(211, 47, 47, 0.3);
+        }
+
+        .add-module-form input[type="file"] {
+            padding: 5px;
+        }
+
+        .add-module-form button,
+        .add-chapter-form button {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-module-form button:disabled,
+        .add-chapter-form button:disabled {
+            background: #CCCCCC;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .add-module-form button:hover:not(:disabled),
+        .add-chapter-form button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(211, 47, 47, 0.4);
+        }
+
+        .module-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .module-card {
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .module-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(211, 47, 47, 0.3);
+            border-color: #D32F2F;
+        }
+
+        .module-card .module-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .module-card h3 {
+            font-size: 1.4rem;
+            color: #333333;
+        }
+
+        .module-card button,
+        .chapter-item button {
+            background: #F5F5F5;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            color: #333333;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .module-card button:hover,
+        .chapter-item button:hover {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            border-color: #D32F2F;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+
+        .module-card button.delete,
+        .chapter-item button.delete {
+            background: #FF6F61;
+            border: none;
+            color: #FFFFFF;
+        }
+
+        .module-card button.delete:hover,
+        .chapter-item button.delete:hover {
+            background: #D32F2F;
+            transform: translateY(-2px);
+        }
+
+        .chapter-list {
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+
+        .chapter-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid rgba(211, 47, 47, 0.2);
+        }
+
+        .chapter-item p {
+            font-size: 1rem;
+            color: #666666;
+            flex: 1;
+        }
+
+        .chapter-item a {
+            color: #D32F2F;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+
+        .chapter-item a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+
+            .header .logo-text span {
+                font-size: 1.2rem;
+            }
+
+            .header .logo-text .tagline {
+                font-size: 0.8rem;
+            }
+
+            .header .nav-menu {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: #FFFFFF;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding: 20px;
+                border-top: 1px solid rgba(211, 47, 47, 0.2);
+            }
+
+            .header .nav-menu.active {
+                display: flex;
+            }
+
+            .header .nav-menu a {
+                font-size: 1.1rem;
+                padding: 15px 0;
+            }
+
+            .header .header-icons {
+                gap: 10px;
+            }
+
+            .header .profile-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .notes-section {
+                padding: 30px 15px;
+            }
+
+            .notes-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .add-module-form h3,
+            .add-chapter-form h3 {
+                font-size: 1.2rem;
+            }
+
+            .add-module-form input,
+            .add-chapter-form input {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+            .add-module-form button,
+            .add-chapter-form button {
+                font-size: 0.9rem;
+                padding: 8px 15px;
+            }
+
+            .module-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .chapter-item p {
+                font-size: 0.9rem;
+            }
+
+            .chapter-item a,
+            .chapter-item button {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="../image/banerjee electronics real logo.jpg" alt="BECS Logo">
+            <div class="logo-text">
+                <span>BECS Learning</span>
+                <p class="tagline">Empowering Tech Education</p>
+            </div>
+        </div>
+        <nav class="nav-menu">
+            <a href="./teacher_dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="./live_lecture.html"><i class="fas fa-video"></i> Live Lecture</a>
+            <a href="./recorded_lecture.html"><i class="fas fa-film"></i> Recorded Lectures</a>
+            <a href="./notes_manage.html" class="active"><i class="fas fa-file-alt"></i> Notes Management</a>
+        </nav>
+        <div class="header-icons">
+            <div class="profile-icon" id="profile-icon">T</div>
+        </div>
+        <div class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <div class="notification" id="notification"></div>
+
+    <section class="notes-section">
+        <h2>Manage Notes</h2>
+        <div class="add-module-form">
+            <h3>Add New Module</h3>
+            <form id="module-form">
+                <label for="module-name">Module Name</label>
+                <input type="text" id="module-name" placeholder="Enter module name" required>
+                <button type="submit" id="add-module-btn">Add Module</button>
+            </form>
+        </div>
+        <div class="module-list" id="module-list"></div>
+        <div class="add-chapter-form" id="chapter-form" style="display: none;">
+            <h3>Add Notes to <span id="chapter-module-name"></span></h3>
+            <form id="chapter-form-inner">
+                <label for="chapter-name">Chapter Name</label>
+                <input type="text" id="chapter-name" placeholder="Enter chapter name" required>
+                <label for="chapter-title">Notes Title</label>
+                <input type="text" id="chapter-title" placeholder="Enter notes title" required>
+                <label for="notes-file">Upload PDF Notes</label>
+                <input type="file" id="notes-file" accept="application/pdf" required>
+                <button type="submit">Add Notes</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        const sharedData = {
+            teacher: {
+                name: "",
+                email: "",
+                photo: "",
+                bio: "",
+                expertise: "",
+                notifications: 0
+            },
+            modules: []
+        };
+
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        const notification = document.getElementById('notification');
+        const moduleForm = document.getElementById('module-form');
+        const addModuleBtn = document.getElementById('add-module-btn');
+        const moduleList = document.getElementById('module-list');
+        const chapterForm = document.getElementById('chapter-form');
+        const chapterFormInner = document.getElementById('chapter-form-inner');
+        const profileIcon = document.getElementById('profile-icon');
+
+        function updateProfileDisplay() {
+            profileIcon.textContent = sharedData.teacher.name ? sharedData.teacher.name.charAt(0).toUpperCase() : 'T';
+        }
+
+        updateProfileDisplay();
+
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            hamburger.innerHTML = navMenu.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function renderModuleList() {
+            moduleList.innerHTML = '';
+            sharedData.modules.forEach((module, moduleIndex) => {
+                const moduleCard = document.createElement('div');
+                moduleCard.className = 'module-card';
+                moduleCard.innerHTML = `
+                    <div class="module-actions">
+                        <h3>${module.name}</h3>
+                        <button onclick="deleteModule(${moduleIndex})" class="delete"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                    <button onclick="showChapterForm(${moduleIndex})"><i class="fas fa-plus"></i> Add Notes</button>
+                    <div class="chapter-list" id="chapter-list-${moduleIndex}">
+                        ${module.chapters.map((chapter, chapterIndex) => `
+                            <div class="chapter-item">
+                                <p>${chapter.name} (${chapter.title})</p>
+                                <div>
+                                    <a href="${chapter.notesUrl}" target="_blank">View Notes</a>
+                                    <button onclick="deleteChapter(${moduleIndex}, ${chapterIndex})" class="delete"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                moduleList.appendChild(moduleCard);
+            });
+        }
+
+        function showChapterForm(moduleIndex) {
+            chapterForm.style.display = 'block';
+            document.getElementById('chapter-module-name').textContent = sharedData.modules[moduleIndex].name;
+            chapterFormInner.dataset.moduleIndex = moduleIndex;
+            document.getElementById('chapter-name').value = '';
+            document.getElementById('chapter-title').value = '';
+            document.getElementById('notes-file').value = '';
+            window.scrollTo({ top: chapterForm.offsetTop, behavior: 'smooth' });
+        }
+
+        function deleteModule(moduleIndex) {
+            if (confirm(`Are you sure you want to delete the module "${sharedData.modules[moduleIndex].name}" and all its notes?`)) {
+                sharedData.modules.splice(moduleIndex, 1);
+                renderModuleList();
+                showNotification('Module deleted successfully!', 'success');
+            }
+        }
+
+        function deleteChapter(moduleIndex, chapterIndex) {
+            if (confirm(`Are you sure you want to delete the notes "${sharedData.modules[moduleIndex].chapters[chapterIndex].name}"?`)) {
+                sharedData.modules[moduleIndex].chapters.splice(chapterIndex, 1);
+                renderModuleList();
+                showNotification('Notes deleted successfully!', 'success');
+            }
+        }
+
+        moduleForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const moduleName = document.getElementById('module-name').value.trim();
+            if (!moduleName) {
+                showNotification('Module name is required.', 'error');
+                return;
+            }
+            if (moduleName.length < 2) {
+                showNotification('Module name must be at least 2 characters long.', 'error');
+                return;
+            }
+            sharedData.modules.push({ name: moduleName, chapters: [] });
+            document.getElementById('module-name').value = '';
+            renderModuleList();
+            showNotification('Module added successfully!', 'success');
+        });
+
+        chapterFormInner.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const moduleIndex = parseInt(chapterFormInner.dataset.moduleIndex);
+            const chapterName = document.getElementById('chapter-name').value.trim();
+            const chapterTitle = document.getElementById('chapter-title').value.trim();
+            const notesFile = document.getElementById('notes-file').files[0];
+
+            if (chapterName.length < 2) {
+                showNotification('Chapter name must be at least 2 characters long.', 'error');
+                return;
+            }
+            if (chapterTitle.length < 2) {
+                showNotification('Notes title must be at least 2 characters long.', 'error');
+                return;
+            }
+            if (!notesFile) {
+                showNotification('Please upload a PDF file.', 'error');
+                return;
+            }
+            if (notesFile.type !== 'application/pdf') {
+                showNotification('Please upload a valid PDF file.', 'error');
+                return;
+            }
+
+            try {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    sharedData.modules[moduleIndex].chapters.push({
+                        name: chapterName,
+                        title: chapterTitle,
+                        notesUrl: reader.result
+                    });
+                    chapterForm.style.display = 'none';
+                    renderModuleList();
+                    showNotification('Notes added successfully!', 'success');
+                };
+                reader.onerror = () => {
+                    showNotification('Error reading PDF file.', 'error');
+                };
+                reader.readAsDataURL(notesFile);
+            } catch (error) {
+                showNotification('An error occurred while uploading the notes.', 'error');
+            }
+        });
+
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                navMenu.classList.remove('active');
+                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+                window.location.href = this.href;
+            });
+        });
+
+        renderModuleList();
+    </script>
+</body>
+
+</html>

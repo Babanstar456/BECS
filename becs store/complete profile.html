@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banerjee Electronics - Edit Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #ff0000dc;
+            --secondary-color: #000000;
+            --accent-color: #ffffff;
+            --text-primary: #000000;
+            --text-secondary: #666666;
+            --background-light: #f5f5f5;
+            --gradient-primary: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+            --gradient-secondary: linear-gradient(135deg, #000000 0%, #333333 100%);
+        }
+
+        body {
+            font-family: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.4;
+            color: var(--text-primary);
+            background: var(--background-light);
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo img {
+            width: 61px;
+            height: 60px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--accent-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: var(--gradient-primary);
+            color: var(--accent-color);
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .user-profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-initials {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-initials:hover,
+        .user-initials:focus {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: var(--accent-color);
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            width: 200px;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+        }
+
+        .user-dropdown.active {
+            display: flex;
+        }
+
+        .user-dropdown a {
+            padding: 12px 20px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown a:hover,
+        .user-dropdown a:focus {
+            background: var(--gradient-primary);
+            color: var(--accent-color);
+        }
+
+        .edit-profile-section {
+            max-width: 600px;
+            margin: 100px auto 80px;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto 40px;
+            text-align: center;
+        }
+
+        .profile-card {
+            background: var(--accent-color);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--primary-color);
+            background: linear-gradient(135deg, #ffffff 70%, #ffcccc 100%);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--primary-color);
+            border-radius: 10px;
+            background: var(--background-light);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--accent-color);
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover,
+        .btn-secondary:focus {
+            background: var(--primary-color);
+            color: var(--accent-color);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: rgba(0, 0, 0, 0.95);
+                flex-direction: column;
+                justify-content: start;
+                padding-top: 50px;
+                transition: left 0.3s ease, opacity 0.3s ease;
+                opacity: 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+                opacity: 1;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .edit-profile-section {
+                margin: 80px auto 60px;
+            }
+
+            .user-dropdown {
+                width: 100%;
+                right: 0;
+                top: 60px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .profile-card {
+                padding: 20px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+  <!-- Navigation (unchanged except userInitials rendering) -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="after login.html" class="logo">
+        <img src="./image/banerjee electronics real logo.jpg" alt="Banerjee Electronics Logo" height="60" width="61">
+        Banerjee Electronics
+      </a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="after login.html#home" class="nav-link">Home</a></li>
+        <li><a href="after login.html#services" class="nav-link">Services</a></li>
+        <li><a href="after login.html#products" class="nav-link">Products</a></li>
+        <li><a href="after login.html#technologies" class="nav-link">Technologies</a></li>
+        <li><a href="after login.html#consultation" class="nav-link nav-cta">Get Quote</a></li>
+        <li class="user-profile">
+          <div class="user-initials" id="userInitials" role="button" aria-label="User Profile" tabindex="0"></div>
+          <div class="user-dropdown" id="userDropdown">
+            <a href="./complete profile.html">Edit Profile</a>
+            <a href="./order track coustomer.html">Order Tracking</a>
+            <a href="./faq section.html">FAQ Section</a>
+            <a href="./login.html" onclick="logout()">Log Out</a>
+          </div>
+        </li>
+      </ul>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Edit Profile Section -->
+  <section class="edit-profile-section">
+    <div class="section-title">Edit Your Profile</div>
+    <div class="section-subtitle">Complete your profile details to stay connected with Banerjee Electronics.</div>
+
+    <div class="profile-card">
+      <form id="editProfileForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" disabled>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" disabled>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" disabled>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="addressLine1">Address Line 1</label>
+          <input type="text" id="addressLine1" name="addressLine1" required>
+        </div>
+        <div class="form-group">
+          <label for="addressLine2">Address Line 2 (Optional)</label>
+          <input type="text" id="addressLine2" name="addressLine2">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" required>
+          </div>
+          <div class="form-group">
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="postalCode">Postal Code</label>
+            <input type="text" id="postalCode" name="postalCode" required>
+          </div>
+          <div class="form-group">
+            <label for="country">Country</label>
+            <input type="text" id="country" name="country" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="bio">Bio</label>
+          <textarea id="bio" name="bio"></textarea>
+        </div>
+        <div class="form-actions">
+          <a href="after login.html" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Cancel
+          </a>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <script>
+  // Initialize from localStorage
+  let userSession = JSON.parse(localStorage.getItem('userSession'));
+  if (!userSession) {
+    alert('Please log in first.');
+    window.location.href = 'login.html';
+  }
+
+  fetch(`http://localhost:3002/get-profile?email=${encodeURIComponent(userSession.email)}`)
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === 'success') {
+      const profile = data.profile;
+
+      // Correct camelCase keys here!
+      document.getElementById('firstName').value = profile.firstName;
+      document.getElementById('lastName').value = profile.lastName;
+      document.getElementById('email').value = profile.email;
+      document.getElementById('userInitials').textContent = `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}`.toUpperCase();
+
+      // Correct keys here too!
+      ['phone', 'addressLine1', 'addressLine2', 'city', 'state', 'postalCode', 'country', 'bio'].forEach(field => {
+        if (profile[field]) {
+          document.getElementById(field).value = profile[field];
+        }
+      });
+    } else {
+      console.error('Error fetching profile:', data.message);
+      alert('Could not load profile. Please try again later.');
+    }
+  })
+  .catch(err => {
+    console.error('Error fetching profile:', err);
+    alert('Could not load profile. Please try again later.');
+  });
+
+
+
+  // Submit handler
+  document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Validate required fields
+    let allFilled = true;
+    ['phone', 'addressLine1', 'city', 'state', 'postalCode', 'country'].forEach(id => {
+      if (!document.getElementById(id).value.trim()) {
+        allFilled = false;
+      }
+    });
+    if (!allFilled) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    const profileData = {
+      email: userSession.email,
+      phone: document.getElementById('phone').value.trim(),
+      addressLine1: document.getElementById('addressLine1').value.trim(),
+      addressLine2: document.getElementById('addressLine2').value.trim(),
+      city: document.getElementById('city').value.trim(),
+      state: document.getElementById('state').value.trim(),
+      postalCode: document.getElementById('postalCode').value.trim(),
+      country: document.getElementById('country').value.trim(),
+      bio: document.getElementById('bio').value.trim()
+    };
+
+    try {
+      const res = await fetch('http://localhost:3002/complete-profile', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(profileData)
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert('Profile updated successfully!');
+        window.location.href = 'after login.html';
+      } else {
+        alert('Error updating profile. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error submitting profile:', err);
+      alert('Server error. Please try again later.');
+    }
+  });
+
+  // Logout
+  function logout() {
+    localStorage.removeItem('userSession');
+    alert('You have been logged out.');
+    window.location.href = 'login.html';
+  }
+</script>
+
+</body>
+
+
+</html>

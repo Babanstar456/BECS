@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Shop for electrical and electronic products at Banerjee Electricals. Explore automation solutions, smart home devices, and more.">
+    <meta name="keywords" content="electronics, electricals, automation, smart home, Banerjee Electricals">
+    <meta name="author" content="Banerjee Electricals">
+    <title>Banerjee Electricals - Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.6.2/fuse.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #e60000;
+            --secondary-color: #ffffff;
+            --accent-color: #f5f5f5;
+            --text-primary: #333333;
+            --gradient-primary: linear-gradient(135deg, #e60000 0%, #b30000 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255,255,255,0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+        }
+
+        body {
+            background: var(--secondary-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 10px 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-bar-container {
+            flex-grow: 1;
+            max-width: 500px;
+            margin: 10px 15px;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 25px;
+            background: var(--accent-color);
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            outline: none;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            box-shadow: 0 5px 15px rgba(230, 0, 0, 0.3);
+            border: 2px solid var(--primary-color);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .autocomplete-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: var(--accent-color);
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+            display: none;
+            z-index: 1001;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .autocomplete-suggestions.active {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 10px 15px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .suggestion-item:hover, .suggestion-item:focus {
+            background: var(--gradient-primary);
+            color: var(--secondary-color);
+        }
+
+        .suggestion-icon {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            align-items: center;
+            margin: 0;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-cta, .nav-shop {
+            padding: 8px 15px;
+            border-radius: 8px;
+            background: var(--gradient-primary);
+            color: var(--secondary-color);
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-align: center;
+            transition: background 0.3s ease, color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            text-decoration: none;
+            touch-action: manipulation;
+        }
+
+        .nav-cta:hover, .nav-shop:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .nav-cta:active, .nav-shop:active {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            transform: scale(0.98);
+        }
+
+        .cart-icon {
+            position: relative;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--primary-color);
+            color: var(--secondary-color);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .user-profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-initials {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 3px 10px rgba(230, 0, 0, 0.3);
+        }
+
+        .user-initials:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 6px 15px rgba(230, 0, 0, 0.4);
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: var(--accent-color);
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            width: 200px;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+            z-index: 1001;
+        }
+
+        .user-dropdown.active {
+            display: flex;
+        }
+
+        .user-dropdown a {
+            padding: 12px 15px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(230, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-dropdown a:hover {
+            background: var(--gradient-primary);
+            color: var(--secondary-color);
+            padding-left: 20px;
+            transform: translateX(5px);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-toggle:hover {
+            transform: rotate(90deg);
+        }
+
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1002;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cart-modal.active {
+            display: flex;
+        }
+
+        .cart-content {
+            background: var(--accent-color);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .cart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .close-cart:hover {
+            transform: scale(1.2) rotate(90deg);
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .cart-item-info {
+            flex-grow: 1;
+        }
+
+        .cart-item-name {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .cart-item-price {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+        }
+
+        .cart-item-source {
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            opacity: 0.7;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            background: var(--gradient-primary);
+            color: var(--secondary-color);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            transform: scale(1.2);
+            background: linear-gradient(135deg, #b30000 0%, #e60000 100%);
+        }
+
+        .quantity-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .remove-item:hover {
+            transform: scale(1.2);
+        }
+
+        .cart-total {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: right;
+        }
+
+        .checkout-btn {
+            background: var(--gradient-primary);
+            color: var(--secondary-color);
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            margin-top: 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease, transform 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            box-shadow: 0 3px 10px rgba(230, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .filter-section {
+            max-width: 1400px;
+            margin: 100px auto 15px;
+            padding: 0 15px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-button {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid var(--primary-color);
+            background: var(--accent-color);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease, transform 0.3s ease;
+        }
+
+        .filter-button:hover {
+            background: var(--gradient-primary);
+            color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .filter-section select, .filter-section input {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid var(--primary-color);
+            background: var(--accent-color);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            width: 150px;
+        }
+
+        .products-section {
+            max-width: 1400px;
+            margin: 15px auto;
+            padding: 0 15px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .product-card {
+            background: var(--accent-color);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(230, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .product-price {
+            font-size: 1rem;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .product-category {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            opacity: 0.7;
+        }
+
+        .product-button {
+            background: var(--gradient-primary);
+            color: var(--secondary-color);
+            padding: 8px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            margin-top: 8px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease, transform 0.3s ease;
+        }
+
+        .product-button:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            box-shadow: 0 3px 10px rgba(230, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .product-button.added {
+            background: #28a745;
+            cursor: default;
+        }
+
+        .product-button.added:hover {
+            background: #28a745;
+            color: var(--secondary-color);
+            box-shadow: none;
+            transform: none;
+        }
+
+        .not-listed-message {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            margin: 15px;
+            padding: 20px;
+            background: var(--accent-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            letter-spacing: 0.02em;
+            line-height: 1.8;
+        }
+
+        .not-listed-message strong {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .not-listed-button {
+            display: inline-block;
+            background: var(--gradient-primary);
+            color: var(--secondary-color);
+            padding: 8px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            transition: all 0.3s ease, transform 0.3s ease;
+        }
+
+        .not-listed-button:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            box-shadow: 0 3px 10px rgba(230, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            background: var(--text-primary);
+            color: var(--secondary-color);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .footer-section p, .footer-section li {
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.2);
+            margin-top: 40px;
+            padding-top: 20px;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        #chatbotToggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(230, 0, 0, 0.3);
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+
+        #chatbotToggle:hover {
+            transform: scale(1.1);
+        }
+
+        #chatbotToggle.pulse {
+            animation: pulse 2s infinite;
+        }
+
+        #chatbotContainer {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 360px;
+            height: 500px;
+            background: var(--accent-color);
+            border-radius: 15px;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            border: 2px solid var(--primary-color);
+        }
+
+        #chatbotHeader {
+            padding: 15px;
+            background: var(--gradient-primary);
+            color: var(--secondary-color);
+            border-top-left-radius: 13px;
+            border-top-right-radius: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #chatbotHeader h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        #chatbotHeader button {
+            background: none;
+            border: none;
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        #chatbotMessages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: linear-gradient(135deg, var(--secondary-color) 70%, #ffcccc 100%);
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 80%;
+            position: relative;
+        }
+
+        .message.user {
+            background: var(--gradient-primary);
+            color: var(--secondary-color);
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .message.bot {
+            background: var(--text-primary);
+            color: var(--secondary-color);
+            margin-right: auto;
+        }
+
+        .message-timestamp {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            margin-right: 3px;
+            animation: typing 1s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        #quickReplies {
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .quick-reply {
+            background: var(--gradient-primary);
+            color: var(--secondary-color);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-reply:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(230, 0, 0, 0.2);
+        }
+
+        #chatInputContainer {
+            padding: 15px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 10px;
+        }
+
+        #chatInput {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid var(--primary-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        #sendMessage {
+            background: var(--gradient-primary);
+            color: var(--secondary-color);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #sendMessage:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 1024px) {
+            .nav-container {
+                padding: 0 10px;
+            }
+
+            .search-bar-container {
+                max-width: 400px;
+                margin: 8px 10px;
+            }
+
+            .nav-menu {
+                gap: 15px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+
+            .product-image {
+                height: 250px;
+            }
+
+            .nav-cta, .nav-shop {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: #ffffff;
+                flex-direction: column;
+                justify-content: start;
+                padding-top: 30px;
+                transition: left 0.3s ease;
+                gap: 20px;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .search-bar-container {
+                margin: 8px 10px;
+                max-width: 100%;
+            }
+
+            .search-bar {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+
+            .filter-section {
+                margin: 90px auto 15px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .filter-section select, .filter-section input {
+                width: 100%;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .product-image {
+                height: 200px;
+            }
+
+            .nav-cta, .nav-shop {
+                width: 100%;
+                text-align: center;
+                padding: 10px;
+                margin: 5px 0;
+            }
+
+            #chatbotContainer {
+                width: 90%;
+                right: 5%;
+                height: 80vh;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.1rem;
+            }
+
+            .logo img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .user-initials, .cart-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+
+            .user-dropdown {
+                width: 180px;
+                top: 45px;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-image {
+                height: 180px;
+            }
+
+            .product-title {
+                font-size: 1rem;
+            }
+
+            .product-price, .product-category, .product-button, .not-listed-message, .not-listed-button {
+                font-size: 0.8rem;
+            }
+
+            .filter-section {
+                margin: 80px auto 15px;
+            }
+
+            .cart-content {
+                width: 95%;
+            }
+
+            .nav-cta, .nav-shop {
+                padding: 8px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <img src="/images/banerjee-electronics-logo.jpg" alt="Banerjee Electricals Logo" onerror="this.src='https://via.placeholder.com/50';">
+                Banerjee Electricals
+            </a>
+            <div class="search-bar-container">
+                <input type="text" class="search-bar" id="searchBar" placeholder="Search for electrical products..." aria-label="Search products">
+                <i class="fas fa-search search-icon"></i>
+                <div class="autocomplete-suggestions" id="autocompleteSuggestions"></div>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="after login.html#home" class="nav-link">Home</a></li>
+                <li><a href="after login.html#services" class="nav-link">Services</a></li>
+                <li><a href="after login.html#products" class="nav-link">Products</a></li>
+                <li><a href="after login.html#technologies" class="nav-link">Technologies</a></li>
+                <li><a href="./electrical shop page.html" class="nav-link nav-shop">Electrical Shop</a></li>
+                <li><a href="after login.html#consultation" class="nav-link nav-cta">Get Quote</a></li>
+                <li class="user-profile">
+                    <div class="cart-icon" id="cartToggle" role="button" aria-label="View Cart" tabindex="0">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                    <div class="user-initials" id="userInitials" role="button" aria-label="User Profile" tabindex="0">??</div>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="./complete profile.html"><i class="fas fa-user-edit"></i> Complete Your Profile</a>
+                        <a href="./order track customer.html"><i class="fas fa-box"></i> Your Orders</a>
+                        <a href="./faq section.html"><i class="fas fa-question-circle"></i> FAQ Section</a>
+                        <a href="./login.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                    </div>
+                </li>
+            </ul>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2 class="cart-title">Your Cart</h2>
+                <button class="close-cart" id="closeCart" aria-label="Close Cart"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="cartItems"></div>
+            <div class="cart-total" id="cartTotal">Total: ₹0</div>
+            <a href="./checkout.html" class="checkout-btn">Proceed to Checkout</a>
+        </div>
+    </div>
+
+    <section class="filter-section" id="filterSection">
+        <select id="categoryFilter" aria-label="Filter by category">
+            <option value="">All Categories</option>
+        </select>
+        <input type="number" id="minPrice" placeholder="Min Price" min="0" aria-label="Minimum price">
+        <input type="number" id="maxPrice" placeholder="Max Price" min="0" aria-label="Maximum price">
+        <button class="filter-button" onclick="applyFiltersAndRender()">Apply Filters</button>
+    </section>
+
+    <section class="products-section" id="products">
+        <div class="products-grid" id="productsGrid"></div>
+    </section>
+
+    <div id="chatbotToggle" class="pulse" role="button" aria-label="Toggle Chatbot" tabindex="0">
+        <i class="fas fa-comment"></i>
+    </div>
+    <div id="chatbotContainer">
+        <div id="chatbotHeader">
+            <h3>Banerjee Electronics Assistant</h3>
+            <button onclick="toggleChatbot()" aria-label="Close Chatbot"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="chatbotMessages">
+            <div class="typing-indicator" id="typingIndicator">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div id="quickReplies"></div>
+        <div id="chatInputContainer">
+            <input type="text" id="chatInput" placeholder="Type your message..." aria-label="Chat Input">
+            <button id="sendMessage" aria-label="Send Message"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Banerjee Electronics</h3>
+                <p>Leading provider of advanced automation solutions, smart electronics, and innovative technology systems for businesses and homes.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Services</h3>
+                <ul>
+                    <li><a href="#services">Industrial Automation</a></li>
+                    <li><a href="#services">Smart Home Solutions</a></li>
+                    <li><a href="#services">Maintenance & Support</a></li>
+                    <li><a href="#services">Custom Electronics Design</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#technologies">Technologies</a></li>
+                    <li><a href="#consultation">Get Quote</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Bhatpara, West Bengal, India</li>
+                    <li><i class="fas fa-phone"></i> +91 98765 43210</li>
+                    <li><i class="fas fa-envelope"></i> info@banerjeeelectronics.com</li>
+                    <li><i class="fas fa-clock"></i> Mon-Sat: 9AM-7PM</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Banerjee Electronics. All rights reserved.<br>
+               Designed and Developed by <a href="https://tathagatasengupta.in/techacon%20solution/index.html">Techacon Solution</a></p>
+        </div>
+    </footer>
+
+    <script>
+        let products = [];
+        let cart = [];
+        let chatHistory = [];
+        let fuse;
+
+        async function initializeShop() {
+            try {
+                const response = await fetch('http://localhost:3006/api/electronics', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                products = await response.json();
+                if (!Array.isArray(products)) {
+                    throw new Error('Received invalid data from server');
+                }
+            } catch (error) {
+                console.error('Error loading electronics products:', error);
+                document.getElementById('productsGrid').innerHTML = `
+                    <div class="not-listed-message">
+                        Unable to load products due to a server issue. Please try again later or contact support at info@banerjeeelectronics.com.
+                        <a href="#consultation" class="not-listed-button">Request a Quote</a>
+                    </div>
+                `;
+                return;
+            }
+            loadCart();
+            updateCategoryFilter();
+            updateFuse();
+            renderProducts(applyFilters());
+            loadChatHistory();
+            document.getElementById('chatbotContainer').style.display = 'none';
+        }
+
+        function setUserInitials() {
+            const userInitialsElem = document.getElementById('userInitials');
+            const user = JSON.parse(localStorage.getItem('user')) || { firstName: 'Guest', lastName: '' };
+            const initials = `${user.firstName?.[0] || 'G'}${user.lastName?.[0] || ''}`.toUpperCase();
+            userInitialsElem.textContent = initials || '??';
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('cart');
+            localStorage.removeItem('chatHistory');
+            window.location.href = './login.html';
+        }
+
+        function updateFuse() {
+            fuse = new Fuse(products, {
+                keys: ['name', 'category', 'description'],
+                threshold: 0.3,
+                includeMatches: true,
+                minMatchCharLength: 2
+            });
+        }
+
+        function applyFilters() {
+            const category = document.getElementById('categoryFilter').value;
+            const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+            const searchTerm = document.getElementById('searchBar').value.trim().toLowerCase();
+
+            let filteredProducts = products.filter(product => {
+                const matchesCategory = !category || product.category === category;
+                const matchesPrice = product.price >= minPrice && product.price <= maxPrice;
+                return matchesCategory && matchesPrice;
+            });
+
+            if (searchTerm) {
+                filteredProducts = fuse.search(searchTerm).map(result => result.item);
+            }
+
+            return filteredProducts;
+        }
+
+        function applyFiltersAndRender() {
+            const filteredProducts = applyFilters();
+            renderProducts(filteredProducts);
+        }
+
+        function renderProducts(productsToRender) {
+            const productsGrid = document.getElementById('productsGrid');
+            productsGrid.innerHTML = '';
+
+            if (productsToRender.length === 0) {
+                productsGrid.innerHTML = `
+                    <div class="not-listed-message">
+                        No products found. <strong>Need something specific?</strong> 
+                        <a href="#consultation" class="not-listed-button">Request a Quote</a>
+                    </div>
+                `;
+                return;
+            }
+
+            productsToRender.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                const isInCart = cart.some(item => item.id === product.id && item.source === 'Electronics');
+                productCard.innerHTML = `
+                    <img src="${product.image || 'https://via.placeholder.com/300'}" alt="${product.name}" class="product-image" loading="lazy">
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-price">₹${product.price.toFixed(2)}</p>
+                        <p class="product-category">${product.category}</p>
+                        <button class="product-button ${isInCart ? 'added' : ''}" 
+                                onclick="addToCart('${product.id}')" 
+                                ${isInCart ? 'disabled' : ''} 
+                                aria-label="${isInCart ? 'Added to cart' : 'Add ' + product.name + ' to cart'}">
+                            ${isInCart ? 'Added to Cart' : 'Add to Cart'}
+                        </button>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+        }
+
+        function debounce(func, delay) {
+            let timeoutId;
+            return function (...args) {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        function toggleChatbot() {
+            const chatbotContainer = document.getElementById('chatbotContainer');
+            const chatbotToggle = document.getElementById('chatbotToggle');
+            chatbotContainer.style.display = chatbotContainer.style.display === 'flex' ? 'none' : 'flex';
+            chatbotToggle.classList.toggle('pulse');
+            chatbotToggle.setAttribute('aria-expanded', chatbotContainer.style.display === 'flex');
+        }
+
+        function loadChatHistory() {
+            chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+            const chatbotMessages = document.getElementById('chatbotMessages');
+            chatbotMessages.innerHTML = '';
+            if (chatHistory.length === 0) {
+                const welcomeMessage = {
+                    text: "Welcome to Banerjee Electronics! How can I assist you today?",
+                    sender: 'bot',
+                    timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+                };
+                chatHistory.push(welcomeMessage);
+                saveChatHistory();
+                addMessageToChat(welcomeMessage.text, welcomeMessage.sender, welcomeMessage.timestamp);
+                updateQuickReplies();
+            } else {
+                chatHistory.forEach(message => {
+                    addMessageToChat(message.text, message.sender, message.timestamp);
+                });
+            }
+        }
+
+        function saveChatHistory() {
+            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+        }
+
+        function addMessageToChat(text, sender, timestamp) {
+            const chatbotMessages = document.getElementById('chatbotMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerHTML = `
+                <p>${text}</p>
+                <div class="message-timestamp">${timestamp}</div>
+            `;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function updateQuickReplies() {
+            const quickRepliesContainer = document.getElementById('quickReplies');
+            quickRepliesContainer.innerHTML = '';
+            const replies = ['View Products', 'Get Quote', 'Support', 'Track Order'];
+            replies.forEach(reply => {
+                const button = document.createElement('button');
+                button.className = 'quick-reply';
+                button.textContent = reply;
+                button.setAttribute('aria-label', `Quick reply: ${reply}`);
+                button.addEventListener('click', () => handleQuickReply(reply));
+                quickRepliesContainer.appendChild(button);
+            });
+        }
+
+        function handleQuickReply(reply) {
+            const userMessage = {
+                text: reply,
+                sender: 'user',
+                timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+            };
+            chatHistory.push(userMessage);
+            saveChatHistory();
+            addMessageToChat(userMessage.text, userMessage.sender, userMessage.timestamp);
+
+            setTimeout(() => {
+                let botResponse = '';
+                switch (reply.toLowerCase()) {
+                    case 'view products':
+                        botResponse = 'Explore our Electronics and Electrical shops at the Products section!';
+                        break;
+                    case 'get quote':
+                        botResponse = 'Please visit the Consultation section to request a personalized quote.';
+                        break;
+                    case 'support':
+                        botResponse = 'Contact our support team at info@banerjeeelectronics.com or call +91 98765 43210.';
+                        break;
+                    case 'track order':
+                        botResponse = 'You can track your order in the "Your Orders" section of your profile.';
+                        break;
+                    default:
+                        botResponse = 'I’m here to help! Please provide more details or choose a quick reply option.';
+                }
+
+                const botMessage = {
+                    text: botResponse,
+                    sender: 'bot',
+                    timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+                };
+                chatHistory.push(botMessage);
+                saveChatHistory();
+                addMessageToChat(botMessage.text, botMessage.sender, botMessage.timestamp);
+            }, 1000);
+        }
+
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            renderCart();
+        }
+
+        function loadCart() {
+            cart = JSON.parse(localStorage.getItem('cart')) || [];
+            saveCart();
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId && p.source === 'Electronics');
+            if (!product) return;
+
+            const cartItem = cart.find(item => item.id === productId && item.source === 'Electronics');
+            if (cartItem) {
+                cartItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            saveCart();
+            updateProductButton(productId);
+        }
+
+        function removeFromCart(productId, source) {
+            cart = cart.filter(item => !(item.id === productId && item.source === source));
+            saveCart();
+            updateProductButton(productId);
+        }
+
+        function updateQuantity(productId, source, quantity) {
+            const cartItem = cart.find(item => item.id === productId && item.source === source);
+            if (cartItem) {
+                cartItem.quantity = Math.max(1, quantity);
+                saveCart();
+                updateProductButton(productId);
+            }
+        }
+
+        function updateProductButton(productId) {
+            const buttons = document.querySelectorAll(`.product-button[onclick="addToCart('${productId}')"]`);
+            const isInCart = cart.some(item => item.id === productId && item.source === 'Electronics');
+            buttons.forEach(button => {
+                button.textContent = isInCart ? 'Added to Cart' : 'Add to Cart';
+                button.className = `product-button ${isInCart ? 'added' : ''}`;
+                button.disabled = isInCart;
+                button.setAttribute('aria-label', isInCart ? 'Added to cart' : `Add to cart`);
+            });
+        }
+
+        function updateCartCount() {
+            const cartCount = document.getElementById('cartCount');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+
+        function renderCart() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            cartItemsContainer.innerHTML = '';
+
+            if (cart.length === 0) {
+                pricey
+                cartItemsContainer.innerHTML = '<p style="text-align: center; color: var(--text-primary);">Your cart is empty.</p>';
+                cartTotal.textContent = 'Total: ₹0';
+                return;
+            }
+
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <img src="${item.image || 'https://via.placeholder.com/60'}" alt="${item.name}" class="cart-item-image" loading="lazy">
+                    <div class="cart-item-info">
+                        <h3 class="cart-item-name">${item.name}</h3>
+                        <p class="cart-item-price">₹${item.price.toFixed(2)} x ${item.quantity}</p>
+                        <p class="cart-item-source">From: ${item.source}</p>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <button class="quantity-btn" onclick="updateQuantity('${item.id}', '${item.source}', ${item.quantity - 1})" aria-label="Decrease quantity of ${item.name}">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity('${item.id}', '${item.source}', ${item.quantity + 1})" aria-label="Increase quantity of ${item.name}">+</button>
+                        <button class="remove-item" onclick="removeFromCart('${item.id}', '${item.source}')" aria-label="Remove ${item.name} from cart"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+            });
+
+            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            cartTotal.textContent = `Total: ₹${total.toFixed(2)}`;
+        }
+
+        function updateCategoryFilter() {
+            const categoryFilter = document.getElementById('categoryFilter');
+            const categories = [...new Set(products.map(p => p.category).filter(c => c))].sort();
+            categoryFilter.innerHTML = '<option value="">All Categories</option>';
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            setUserInitials();
+            initializeShop();
+
+            document.getElementById('mobileToggle').addEventListener('click', () => {
+                document.getElementById('navMenu').classList.toggle('active');
+            });
+
+            document.getElementById('mobileToggle').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    document.getElementById('navMenu').classList.toggle('active');
+                }
+            });
+
+            document.getElementById('cartToggle').addEventListener('click', () => {
+                document.getElementById('cartModal').classList.toggle('active');
+            });
+
+            document.getElementById('cartToggle').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    document.getElementById('cartModal').classList.toggle('active');
+                }
+            });
+
+            document.getElementById('closeCart').addEventListener('click', () => {
+                document.getElementById('cartModal').classList.remove('active');
+            });
+
+            document.getElementById('closeCart').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    document.getElementById('cartModal').classList.remove('active');
+                }
+            });
+
+            document.getElementById('userInitials').addEventListener('click', () => {
+                document.getElementById('userDropdown').classList.toggle('active');
+            });
+
+            document.getElementById('userInitials').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    document.getElementById('userDropdown').classList.toggle('active');
+                }
+            });
+
+            document.getElementById('chatbotToggle').addEventListener('click', toggleChatbot);
+            document.getElementById('chatbotToggle').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleChatbot();
+                }
+            });
+
+            document.getElementById('sendMessage').addEventListener('click', sendMessage);
+            document.getElementById('chatInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+
+            document.getElementById('searchBar').addEventListener('input', debounce(() => {
+                const searchTerm = document.getElementById('searchBar').value.trim();
+                const suggestionsContainer = document.getElementById('autocompleteSuggestions');
+                suggestionsContainer.innerHTML = '';
+                if (!searchTerm) {
+                    suggestionsContainer.classList.remove('active');
+                    applyFiltersAndRender();
+                    return;
+                }
+
+                const results = fuse.search(searchTerm).slice(0, 5);
+                if (results.length > 0) {
+                    suggestionsContainer.classList.add('active');
+                    results.forEach(result => {
+                        const suggestion = document.createElement('div');
+                        suggestion.className = 'suggestion-item';
+                        suggestion.setAttribute('tabindex', '0');
+                        suggestion.innerHTML = `
+                            <i class="fas fa-lightbulb suggestion-icon"></i>
+                            ${result.item.name}
+                        `;
+                        suggestion.addEventListener('click', () => {
+                            document.getElementById('searchBar').value = result.item.name;
+                            suggestionsContainer.classList.remove('active');
+                            applyFiltersAndRender();
+                        });
+                        suggestion.addEventListener('keypress', (e) => {
+                            if (e.key === 'Enter') suggestion.click();
+                        });
+                        suggestionsContainer.appendChild(suggestion);
+                    });
+                } else {
+                    suggestionsContainer.classList.remove('active');
+                }
+                applyFiltersAndRender();
+            }, 300));
+
+            document.getElementById('searchBar').addEventListener('keydown', (e) => {
+                const suggestions = document.querySelectorAll('.suggestion-item');
+                if (!suggestions.length) return;
+
+                let focusedIndex = Array.from(suggestions).findIndex(s => s === document.activeElement);
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    focusedIndex = (focusedIndex + 1) % suggestions.length;
+                    suggestions[focusedIndex].focus();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    focusedIndex = (focusedIndex - 1 + suggestions.length) % suggestions.length;
+                    suggestions[focusedIndex].focus();
+                } else if (e.key === 'Enter' && focusedIndex >= 0) {
+                    suggestions[focusedIndex].click();
+                }
+            });
+        });
+
+        function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const messageText = chatInput.value.trim();
+            if (!messageText) return;
+
+            const userMessage = {
+                text: messageText,
+                sender: 'user',
+                timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+            };
+            chatHistory.push(userMessage);
+            saveChatHistory();
+            addMessageToChat(userMessage.text, userMessage.sender, userMessage.timestamp);
+            chatInput.value = '';
+
+            const typingIndicator = document.getElementById('typingIndicator');
+            typingIndicator.style.display = 'block';
+
+            setTimeout(() => {
+                typingIndicator.style.display = 'none';
+                const botResponse = {
+                    text: "Thanks for your message! Our team will get back to you soon. For immediate assistance, try our quick reply options.",
+                    sender: 'bot',
+                    timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+                };
+                chatHistory.push(botResponse);
+                saveChatHistory();
+                addMessageToChat(botResponse.text, botResponse.sender, botResponse.timestamp);
+                updateQuickReplies();
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

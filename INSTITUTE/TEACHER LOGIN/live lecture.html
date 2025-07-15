@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BECS Learning Platform - Live Lecture Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #F5F5F5;
+            color: #333333;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background: #FFFFFF;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .header .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header .logo-text span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #D32F2F;
+        }
+
+        .header .logo-text .tagline {
+            font-size: 0.9rem;
+            color: #666666;
+            font-weight: 300;
+        }
+
+        .header .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header .nav-menu a {
+            color: #333333;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 10px;
+        }
+
+        .header .nav-menu a:hover {
+            color: #D32F2F;
+            transform: translateY(-2px);
+        }
+
+        .header .nav-menu a.active {
+            color: #D32F2F;
+            border-bottom: 3px solid #D32F2F;
+            padding-bottom: 5px;
+        }
+
+        .header .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            color: #333333;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            padding: 10px;
+        }
+
+        .header .hamburger:hover {
+            color: #D32F2F;
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #FFFFFF;
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            color: #333333;
+            font-size: 1rem;
+            z-index: 1001;
+            display: none;
+        }
+
+        .notification.success {
+            border-color: #D32F2F;
+            background: #F5F5F5;
+        }
+
+        .notification.error {
+            border-color: #FF6F61;
+            background: #FFF5F5;
+        }
+
+        /* Live Lecture Section Styles */
+        .live-lecture-section {
+            padding: 50px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .live-lecture-section h2 {
+            font-size: 2.8rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+            color: #333333;
+            text-align: center;
+            letter-spacing: 1.2px;
+        }
+
+        .live-lecture-form {
+            background: #FFFFFF;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .live-lecture-form form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .live-lecture-form label {
+            font-size: 1rem;
+            color: #666666;
+            margin-bottom: 5px;
+            text-align: left;
+        }
+
+        .live-lecture-form input,
+        .live-lecture-form textarea {
+            background: #F5F5F5;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            color: #333333;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .live-lecture-form input:focus,
+        .live-lecture-form textarea:focus {
+            border-color: #D32F2F;
+            box-shadow: 0 0 8px rgba(211, 47, 47, 0.3);
+        }
+
+        .live-lecture-form textarea {
+            resize: vertical;
+            min-height: 100px;
+            max-height: 200px;
+        }
+
+        .live-lecture-form button {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .live-lecture-form button:disabled {
+            background: #CCCCCC;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .live-lecture-form button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(211, 47, 47, 0.4);
+        }
+
+        .live-lecture-form a {
+            color: #D32F2F;
+            text-decoration: none;
+            font-size: 1rem;
+            margin-top: 20px;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+        .live-lecture-form a:hover {
+            color: #FF6F61;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: #FFFFFF;
+            padding: 40px 20px;
+            border-top: 2px solid rgba(211, 47, 47, 0.2);
+            color: #666666;
+            text-align: center;
+        }
+
+        .footer .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .footer .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #333333;
+            margin-bottom: 15px;
+        }
+
+        .footer p,
+        .footer a {
+            font-size: 0.9rem;
+            color: #666666;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .footer a:hover {
+            color: #D32F2F;
+        }
+
+        .footer .social-icons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .footer .social-icons a {
+            font-size: 1.2rem;
+            color: #D32F2F;
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-icons a:hover {
+            color: #FF6F61;
+        }
+
+        .footer .copyright {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #666666;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+            }
+
+            .header .logo-text span {
+                font-size: 1.2rem;
+            }
+
+            .header .logo-text .tagline {
+                font-size: 0.8rem;
+            }
+
+            .header .nav-menu {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: #FFFFFF;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding: 20px;
+                border-top: 1px solid rgba(211, 47, 47, 0.2);
+            }
+
+            .header .nav-menu.active {
+                display: flex;
+            }
+
+            .header .nav-menu a {
+                font-size: 1.1rem;
+                padding: 15px 0;
+            }
+
+            .header .hamburger {
+                display: flex;
+                align-items: center;
+            }
+
+            .notification {
+                top: 10px;
+                right: 10px;
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .live-lecture-section {
+                padding: 30px 15px;
+            }
+
+            .live-lecture-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .live-lecture-form {
+                padding: 20px;
+            }
+
+            .live-lecture-form input,
+            .live-lecture-form textarea,
+            .live-lecture-form button,
+            .live-lecture-form a {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+
+            .live-lecture-form textarea {
+                min-height: 80px;
+            }
+
+            .footer .footer-content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer .footer-section {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="../image/banerjee electronics real logo.jpg" alt="BECS Logo">
+            <div class="logo-text">
+                <span>BECS Learning</span>
+                <p class="tagline">Empowering Tech Education</p>
+            </div>
+        </div>
+        <nav class="nav-menu">
+            <a href="./teacher_dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="./live_lecture.html" class="active"><i class="fas fa-video"></i> Live Lecture</a>
+            <a href="./recorded_lecture.html"><i class="fas fa-film"></i> Recorded Lectures</a>
+            <a href="./notes_manage.html"><i class="fas fa-file-alt"></i> Notes Management</a>
+        </nav>
+        <div class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <div class="notification" id="notification"></div>
+
+    <section class="live-lecture-section">
+        <h2>Live Lecture Management</h2>
+        <div class="live-lecture-form">
+            <form id="live-lecture-form">
+                <label for="chapter-name">Chapter Name</label>
+                <input type="text" id="chapter-name" placeholder="e.g., Chapter 1: Introduction" required>
+                <label for="lecture-title">Lecture Title</label>
+                <input type="text" id="lecture-title" placeholder="e.g., Basics of Electronics" required>
+                <label for="lecture-about">About</label>
+                <textarea id="lecture-about" placeholder="Describe the lecture content"></textarea>
+                <label for="youtube-link">YouTube Live Stream Link</label>
+                <input type="text" id="youtube-link" placeholder="e.g., https://www.youtube.com/watch?v=VIDEO_ID"
+                    required>
+                <button type="submit" id="save-lecture">Save Lecture</button>
+            </form>
+            <a href="./teacher_dashboard.html">Back to Dashboard</a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: support@becslearning.com</p>
+                <p>Phone: +1 (123) 456-7890</p>
+                <p>Address: 123 Tech Lane, EdTech City</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="./teacher_dashboard.html">Dashboard</a>
+                <a href="./contact-us.html">Contact Us</a>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 BECS Learning Platform. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        const sharedData = {
+            teacher: {
+                name: "",
+                email: "",
+                photo: "",
+                bio: "",
+                expertise: "",
+                notifications: 0
+            },
+            liveLecture: {
+                chapterName: "",
+                title: "",
+                about: "",
+                link: ""
+            }
+        };
+
+        const notification = document.getElementById('notification');
+        const liveLectureForm = document.getElementById('live-lecture-form');
+        const saveLectureButton = document.getElementById('save-lecture');
+        const chapterNameInput = document.getElementById('chapter-name');
+        const lectureTitleInput = document.getElementById('lecture-title');
+        const lectureAboutInput = document.getElementById('lecture-about');
+        const youtubeLinkInput = document.getElementById('youtube-link');
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            hamburger.innerHTML = navMenu.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function isValidYouTubeUrl(url) {
+            const regex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|live\/)|youtu\.be\/)[^\s]+$/;
+            return regex.test(url);
+        }
+
+        liveLectureForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveLectureButton.disabled = true;
+
+            const chapterName = chapterNameInput.value.trim();
+            const lectureTitle = lectureTitleInput.value.trim();
+            const lectureAbout = lectureAboutInput.value.trim();
+            const youtubeUrl = youtubeLinkInput.value.trim();
+
+            if (chapterName.length < 2 || chapterName.length > 50) {
+                showNotification('Chapter name must be 2-50 characters long.', 'error');
+                saveLectureButton.disabled = false;
+                return;
+            }
+            if (lectureTitle.length < 2 || lectureTitle.length > 100) {
+                showNotification('Lecture title must be 2-100 characters long.', 'error');
+                saveLectureButton.disabled = false;
+                return;
+            }
+            if (lectureAbout.length > 500) {
+                showNotification('About section cannot exceed 500 characters.', 'error');
+                saveLectureButton.disabled = false;
+                return;
+            }
+            if (!isValidYouTubeUrl(youtubeUrl)) {
+                showNotification('Please enter a valid YouTube URL.', 'error');
+                saveLectureButton.disabled = false;
+                return;
+            }
+
+            sharedData.liveLecture = {
+                chapterName,
+                title: lectureTitle,
+                about: lectureAbout,
+                link: youtubeUrl
+            };
+
+            showNotification('Live lecture details saved successfully!', 'success');
+            liveLectureForm.reset();
+            saveLectureButton.disabled = false;
+            setTimeout(() => {
+                window.location.href = 'teacher_dashboard.html';
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

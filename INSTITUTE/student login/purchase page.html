@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BECS Learning Platform - Purchased Courses</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #F5F5F5;
+            color: #333333;
+            overflow-x: hidden;
+        }
+
+         .header {
+            background: #FFFFFF;
+            padding: 15px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .header .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header .logo-text span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #D32F2F;
+        }
+
+        .header .logo-text .tagline {
+            font-size: 0.9rem;
+            color: #666666;
+            font-weight: 300;
+        }
+
+        .header .search-bar {
+            position: relative;
+            max-width: 300px;
+            flex: 1;
+            margin: 0 20px;
+        }
+
+        .header .search-bar input {
+            width: 100%;
+            padding: 8px 35px 8px 15px;
+            background: #F5F5F5;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            border-radius: 20px;
+            color: #333333;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .header .search-bar input:focus {
+            border-color: #D32F2F;
+            box-shadow: 0 0 8px rgba(211, 47, 47, 0.3);
+        }
+
+        .header .search-bar .search-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #D32F2F;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .header .search-bar .search-icon:hover {
+            color: #FF6F61;
+        }
+
+        .header .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header .nav-menu a {
+            color: #333333;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .header .nav-menu a:hover {
+            color: #D32F2F;
+            transform: translateY(-2px);
+        }
+
+        .header .nav-menu a.active {
+            color: #D32F2F;
+            border-bottom: 3px solid #D32F2F;
+            padding-bottom: 5px;
+        }
+
+        .header .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header .profile-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+        }
+
+        .header .profile-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 12px rgba(211, 47, 47, 0.4);
+        }
+
+        .header .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            color: #333333;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .header .hamburger:hover {
+            color: #D32F2F;
+        }
+
+       
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #28a745;
+            display: inline-block;
+            margin-left: auto;
+        }
+
+        .loading {
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            margin-top: 4px;
+        }
+
+        .search-suggestion {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.2s ease;
+        }
+
+        .search-suggestion:hover {
+            background: #f8f9fa;
+        }
+
+        .search-suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .search-suggestion i {
+            color: #D32F2F;
+            width: 16px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #28a745;
+        }
+
+        .notification.error {
+            background: #dc3545;
+        }
+
+        .notification.info {
+            background: #17a2b8;
+        }
+
+        .courses-section {
+            padding: 50px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .courses-section h2 {
+            font-size: 2.8rem;
+            font-weight: 500;
+            margin-bottom: 40px;
+            color: #333333;
+            text-align: center;
+            letter-spacing: 1.2px;
+        }
+
+        .courses-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .course-card {
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            opacity: 0;
+            transform: translateY(-60px);
+            animation: slideDown 0.6s ease forwards;
+        }
+
+        @keyframes slideDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-60px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .course-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .course-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .course-card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(211, 47, 47, 0.3);
+            border-color: #D32F2F;
+        }
+
+        .course-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .course-info svg {
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(0 4px 8px rgba(211, 47, 47, 0.2));
+        }
+
+        .course-details {
+            flex: 1;
+        }
+
+        .course-details h3 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #333333;
+            margin-bottom: 5px;
+        }
+
+        .course-details p {
+            font-size: 0.9rem;
+            color: #666666;
+        }
+
+        .course-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .course-actions a {
+            background: linear-gradient(135deg, #D32F2F 0%, #FF6F61 100%);
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .course-actions a:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 15px rgba(211, 47, 47, 0.4);
+        }
+
+        .course-actions a:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
+        }
+
+        .no-courses-message {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666666;
+            margin-top: 20px;
+        }
+
+        .footer {
+            background: #FFFFFF;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(211, 47, 47, 0.2);
+            color: #666666;
+            text-align: center;
+        }
+
+        .footer .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .footer .footer-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #D32F2F;
+            margin-bottom: 15px;
+        }
+
+        .footer p,
+        .footer a:not(.social-icons a) {
+            font-size: 0.9rem;
+            color: #666666;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .footer a:not(.social-icons a):hover {
+            color: #D32F2F;
+        }
+
+        .footer .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .footer .social-icons a {
+            font-size: 1.8rem;
+            color: #D32F2F;
+            transition: color 0.3s ease, transform 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(211, 47, 47, 0.1);
+            text-decoration: none;
+            line-height: 1;
+        }
+
+        .footer .social-icons a:hover {
+            color: #FF6F61;
+            transform: scale(1.2);
+            background: rgba(211, 47, 47, 0.2);
+        }
+
+        .footer .social-icons a i {
+            display: inline-block;
+            text-align: center;
+        }
+
+        .footer .social-icons a svg {
+            width: 24px;
+            height: 24px;
+            fill: #D32F2F;
+        }
+
+        .footer .social-icons a:hover svg {
+            fill: #FF6F61;
+        }
+
+        .footer .copyright {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #999999;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .header .logo span {
+                font-size: 1.2rem;
+            }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .profile-dropdown {
+                top: 70px;
+                right: 20px;
+                width: 90%;
+                max-width: 280px;
+                padding: 20px;
+            }
+
+            .profile-dropdown h3 {
+                font-size: 1.2rem;
+            }
+
+            .profile-dropdown input {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+            .profile-dropdown button {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .notification {
+                top: 10px;
+                right: 10px;
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .courses-section {
+                padding: 30px 15px;
+            }
+
+            .courses-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .course-card {
+                padding: 15px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .course-info {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+            }
+
+            .course-info svg {
+                width: 30px;
+                height: 30px;
+            }
+
+            .course-details h3 {
+                font-size: 1.4rem;
+            }
+
+            .course-details p {
+                font-size: 0.8rem;
+            }
+
+            .course-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .course-actions a {
+                padding: 8px 15px;
+                font-size: 0.8rem;
+            }
+
+            .footer .footer-content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer .footer-section {
+                text-align: center;
+            }
+
+            .footer .social-icons a {
+                font-size: 1.5rem;
+                width: 40px;
+                height: 40px;
+            }
+
+            .footer .social-icons a svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+     <header class="header">
+        <div class="logo">
+            <img src="./banerjee electronics real logo.jpg" alt="BECS Logo">
+            <div class="logo-text">
+                <span>BECS Learning</span>
+                <p class="tagline">Empowering Tech Education</p>
+            </div>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search courses or simulations...">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+        <nav class="nav-menu">
+            <a href="./student landing.html" ><i class="fas fa-home"></i> Dashboard</a>
+            <a href="./purchase page.html" class="active"><i class="fas fa-book"></i> Purchased Courses</a>
+            <a href="./contact us.html"><i class="fas fa-headset"></i> Support</a>
+        </nav>
+    
+        <div class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <section class="courses-section">
+        <h2>Purchased Courses</h2>
+        <div id="courses-list" class="courses-list"></div>
+<div class="notification" id="notification"></div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: support@becslearning.com</p>
+                <p>Phone: +1 (123) 456-7890</p>
+                <p>Address: 123 Tech Lane, Innovation City</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="https://facebook.com" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://youtube.com" target="_blank" title="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="./student-landing.html">Dashboard</a>
+                <a href="./purchased-courses.html">Purchased Courses</a>
+                <a href="./support.html">Support</a>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 BECS Learning Platform. All rights reserved.
+        </div>
+    </footer>
+
+    <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB5Ur6-mq9uE4fU0HOaQQhKk3nayTiQCfk",
+  authDomain: "becs-370ab.firebaseapp.com",
+  projectId: "becs-370ab",
+  storageBucket: "becs-370ab.appspot.com",
+  messagingSenderId: "265733015540",
+  appId: "1:265733015540:web:fddcee2dc226ad9be85ba1"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+const SERVER_URL = "http://localhost:3007"; // Change to production when deployed
+
+// DOM Elements
+const coursesList = document.getElementById("courses-list");
+const notification = document.getElementById("notification");
+const loginBtn = document.getElementById("login-btn");
+const logoutBtn = document.getElementById("logout-btn");
+const loadingIndicator = document.querySelector(".loading-indicator");
+
+// 🔔 Notifications
+function showNotification(message, type = 'info') {
+  if (!notification) return;
+  notification.textContent = message;
+  notification.className = `notification show ${type}`;
+  setTimeout(() => notification.classList.remove("show"), 4000);
+}
+
+// 🧠 Font Awesome fallback (optional)
+async function checkFontAwesome() {
+  try {
+    const icon = document.createElement('i');
+    icon.className = 'fas fa-check';
+    icon.style.visibility = 'hidden';
+    document.body.appendChild(icon);
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+    const fontFamily = getComputedStyle(icon).fontFamily;
+    document.body.removeChild(icon);
+
+    return fontFamily.includes('Font Awesome') || fontFamily.includes('FontAwesome');
+  } catch {
+    return false;
+  }
+}
+
+function applyFontAwesomeFallback() {
+  document.querySelectorAll('[class^="fa-"]').forEach(el => {
+    const iconClass = [...el.classList].find(cls => cls.startsWith('fa-'));
+    if (iconClass) {
+      const iconName = iconClass.replace('fa-', '');
+      el.innerHTML = `<svg class="fallback-icon"><!-- ${iconName} fallback --></svg>`;
+    }
+  });
+}
+
+// 🎓 Render Courses
+function renderCourses(courses = []) {
+  if (!coursesList) return;
+
+  if (courses.length === 0) {
+    coursesList.innerHTML = `
+      <div class="no-courses-message">
+        <i class="fas fa-book-open"></i> You haven’t purchased any courses yet.
+      </div>
+    `;
+    return;
+  }
+
+  coursesList.innerHTML = courses.map((course, index) => `
+    <div class="course-card" style="animation-delay: ${index * 0.1}s">
+      <div class="course-info">
+        <img src="${course.image_link || 'default-course.jpg'}"
+             alt="${course.course_name}"
+             onerror="this.src='default-course.jpg'"
+             style="width:80px;height:80px;border-radius:8px;object-fit:cover;">
+        <div class="course-details">
+          <h3>${course.course_name}</h3>
+          <p>${course.course_description}</p>
+          <div class="course-meta">
+            <span class="price">$${course.price || '0.00'}</span>
+            <span class="purchase-date">
+              <i class="far fa-calendar-alt"></i>
+              ${new Date(course.purchased_at).toLocaleDateString()}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="course-actions">
+        <a href="/course/${course.course_id}">
+          <i class="fas fa-arrow-right"></i> Access Course
+        </a>
+      </div>
+    </div>
+  `).join('');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("animate-in");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll(".course-card").forEach(card => observer.observe(card));
+}
+
+// 🚀 Load Courses
+async function loadCourses(user) {
+  if (!user || !coursesList) return;
+  showNotification("Fetching your courses...", "info");
+  showLoading(true);
+  coursesList.innerHTML = "";
+
+  try {
+    const token = await user.getIdToken();
+    const response = await fetch(`${SERVER_URL}/api/user/${user.uid}/courses`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.message || "Failed to load courses");
+    }
+
+    const data = await response.json();
+    renderCourses(data.courses);
+    showNotification("Courses loaded ✅", "success");
+  } catch (error) {
+    console.error("Course fetch failed:", error);
+    coursesList.innerHTML = `
+      <div class="error-state">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p>${error.message}</p>
+        <button onclick="window.location.reload()">Retry</button>
+      </div>
+    `;
+    showNotification(error.message, "error");
+  } finally {
+    showLoading(false);
+  }
+}
+
+// 👥 Auth State Handler
+function handleAuthState(user) {
+  if (user) {
+    if (logoutBtn) logoutBtn.style.display = "block";
+    if (loginBtn) loginBtn.style.display = "none";
+    loadCourses(user);
+  } else {
+    if (logoutBtn) logoutBtn.style.display = "none";
+    if (loginBtn) loginBtn.style.display = "block";
+    coursesList.innerHTML = `
+      <div class="auth-prompt">
+        <i class="fas fa-sign-in-alt"></i>
+        <p>Please sign in with Google to view your courses</p>
+      </div>
+    `;
+  }
+}
+
+// UI Helpers
+function showLoading(show) {
+  if (loadingIndicator) {
+    loadingIndicator.style.display = show ? "flex" : "none";
+  }
+}
+
+// 🔘 Login with Google
+if (loginBtn) {
+  loginBtn.addEventListener("click", () => {
+    signInWithPopup(auth, provider)
+      .then(result => {
+        showNotification(`Welcome ${result.user.displayName}`, "success");
+      })
+      .catch(err => {
+        console.error("Login failed:", err);
+        showNotification("Login failed", "error");
+      });
+  });
+}
+
+// 🔓 Logout
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    signOut(auth)
+      .then(() => showNotification("Logged out", "info"))
+      .catch(err => {
+        console.error("Logout failed:", err);
+        showNotification("Logout error", "error");
+      });
+  });
+}
+
+// 🚀 On Load
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!await checkFontAwesome()) applyFontAwesomeFallback();
+  onAuthStateChanged(auth, handleAuthState);
+});
+</script>
+
+
+</body>
+
+</html> 

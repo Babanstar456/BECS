@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banerjee Electronics - Dashboard</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Slab:wght@700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #F5F5F5 0%, #E0E0E0 100%);
+            color: #333333;
+            overflow-x: hidden;
+        }
+
+        /* Header Section */
+        header {
+            background: linear-gradient(135deg, #FFFFFF 0%, #E0E0E0 100%);
+            padding: 20px 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .logo {
+            font-family: 'Roboto Slab', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #D32F2F;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #1A1A1A 0%, #2C2C2C 100%);
+            color: #FFFFFF;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-button:hover {
+            background: linear-gradient(135deg, #2C2C2C 0%, #1A1A1A 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, #FFFFFF 0%, #E8E8E8 100%);
+            padding: 100px 20px 60px;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            z-index: 2;
+        }
+
+        .hero-image {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #D32F2F;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(100px);
+            animation: slideUp 2.5s ease-out 0.5s forwards, glowPulse 3s ease-in-out infinite;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .hero-image:hover,
+        .hero-image.touched {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        .hero-text h1 {
+            font-family: 'Roboto Slab', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #333333;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero-text p {
+            font-size: 1.1rem;
+            color: #666666;
+            line-height: 1.8;
+            max-width: 600px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            padding: 120px 20px;
+            background: linear-gradient(180deg, #F5F5F5 0%, #E0E0E0 100%);
+            position: relative;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .dashboard-container h2 {
+            font-family: 'Roboto Slab', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #333333;
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #FFFFFF 0%, #E8E8E8 100%);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            border-color: #1A1A1A;
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            color: #D32F2F;
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .card:hover .card-icon {
+            color: #FF6F61;
+        }
+
+        .card h3 {
+            font-family: 'Roboto Slab', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            color: #666666;
+            line-height: 1.6;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .card-button {
+            background: linear-gradient(135deg, #1A1A1A 0%, #2C2C2C 100%);
+            color: #FFFFFF;
+            padding: 12px 35px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-button:hover {
+            background: linear-gradient(135deg, #2C2C2C 0%, #1A1A1A 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Quote Section */
+        .quote-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #1A1A1A 0%, #2C2C2C 100%);
+            text-align: center;
+            position:  hidden;
+        }
+
+        .quote-section::before,
+        .quote-section::after {
+            content: '"';
+            position: absolute;
+            font-family: 'Roboto Slab', serif;
+            font-size: 6rem;
+            color: rgba(211, 47, 47, 0.3);
+            opacity: 0.2;
+            z-index: 1;
+        }
+
+        .quote-section::before {
+            top: 20px;
+            left: 40px;
+        }
+
+        .quote-section::after {
+            bottom: 20px;
+            right: 40px;
+            transform: rotate(180deg);
+        }
+
+        .quote-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #FFFFFF 0%, #E8E8E8 100%);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .quote-container.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .quote-container blockquote {
+            font-family: 'Roboto Slab', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333333;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .quote-container blockquote::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #D32F2F 0%, #FF6F61 100%);
+        }
+
+        .quote-container cite {
+            font-size: 1.2rem;
+            color: #D32F2F;
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        /* Team Section */
+        .team-section {
+            padding: 80px 20px;
+            background: linear-gradient(180deg, #F5F5F5 0%, #E0E0E0 100%);
+            text-align: center;
+        }
+
+        .team-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-container h2 {
+            font-family: 'Roboto Slab', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #333333;
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .team-members {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .team-member {
+            background: linear-gradient(145deg, #FFFFFF 0%, #E8E8E8 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            border-color: #1A1A1A;
+        }
+
+        .team-member img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #D32F2F;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .team-member img:hover,
+        .team-member img.touched {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .team-member h3 {
+            font-family: 'Roboto Slab', serif;
+            font-size: 1.4rem;
+            color: #333333;
+            margin-bottom: 10px;
+        }
+
+        .team-member p {
+            color: #666666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .logo-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo-img {
+                width: 30px;
+                height: 30px;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-button {
+                padding: 8px 20px;
+                font-size: 0.9rem;
+            }
+
+            .hero-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-image {
+                width: 180px;
+                height: 180px;
+            }
+
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+
+            .hero-text p {
+                font-size: 1rem;
+            }
+
+            .dashboard-container h2,
+            .team-container h2 {
+                font-size: 2rem;
+            }
+
+            .cards-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .card {
+                padding: 30px;
+            }
+
+            .card-icon {
+                font-size: 3rem;
+            }
+
+            .card h3 {
+                font-size: 1.5rem;
+            }
+
+            .card p {
+                font-size: 0.9rem;
+            }
+
+            .card-button {
+                padding: 10px 25px;
+                font-size: 0.9rem;
+            }
+
+            .quote-section {
+                padding: 60px 15px;
+            }
+
+            .quote-container {
+                padding: 30px;
+            }
+
+            .quote-container blockquote {
+                font-size: 1.6rem;
+            }
+
+            .quote-container cite {
+                font-size: 1rem;
+            }
+
+            .quote-section::before,
+            .quote-section::after {
+                font-size: 4rem;
+            }
+
+            .team-members {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="./becs store/image/banerjee electronics real logo.jpg" alt="Company Logo" class="logo-img">
+                <div class="logo">Banerjee Electronics</div>
+            </div>
+            <nav class="nav-buttons">
+                <a href="./becs store/landing.html" class="nav-button">BECS Store</a>
+                <a href="./INSTITUTE/student login/home.html" class="nav-button">BECS Learning Platform</a>
+            </nav>
+        </div>
+    </header>
+<section class="dashboard-section">
+        <div class="dashboard-container">
+            <h2>Welcome to Banerjee Electronics</h2>
+            <div class="cards-container">
+                <div class="card">
+                    <i class="fas fa-shopping-cart card-icon"></i>
+                    <h3>BECS Store</h3>
+                    <p>Discover our curated selection of high-quality electronics components, kits, and tools designed
+                        to accelerate your projects.</p>
+                    <a href="./becs store/landing.html" class="card-button">Visit Store</a>
+                </div>
+                <div class="card">
+                    <i class="fas fa-graduation-cap card-icon"></i>
+                    <h3>BECS Learning Platform</h3>
+                    <p>Elevate your skills with our comprehensive courses on circuit design, embedded systems, and IoT,
+                        led by industry experts.</p>
+                    <a href="./INSTITUTE/student login/home.html" class="card-button">Start Learning</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-container">
+            <img src="/bbnew.jpeg" alt="CEO Image" class="hero-image">
+            <div class="hero-text">
+                <h1>Message from Our CEO</h1>
+                <p>At Banerjee Electronics Consultancy Services, we are committed to driving innovation in the electronics industry. Our
+                    mission is to provide top-tier tools and education to empower engineers and creators worldwide. Join
+                    us in shaping the future of technology.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    
+
+    <!-- Quote Section -->
+    <section class="quote-section">
+        <div class="quote-container">
+            <blockquote>"Excellence in electronics starts with innovation and education."</blockquote>
+            <cite>- CEO, Banerjee Electronics</cite>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="team-container">
+            <h2>Our Leadership Team</h2>
+            <div class="team-members">
+                <div class="team-member">
+                    <img src="/BB.jpg" alt="Team Member 1">
+                    <h3>Biswadeep Banerjee</h3>
+                    <p>Founder & Chief Executive Officer</p>
+                </div>
+                <div class="team-member">
+                    <img src="/biplab.jpeg "alt="Team Member 1">
+                    <h3>Biplab Banerjee</h3>
+                    <p>Chief Advisor</p>
+                </div>
+                <div class="team-member">
+                    <img src="/asish.jpeg" alt="Team Member 2">
+                    <h3>Dr. Ashish Kar</h3>
+                    <p>Academic Advisor</p>
+                </div>
+                <div class="team-member">
+                    <img src="/swastika.jpeg" alt="Team Member 2">
+                    <h3>Swastika Akuli</h3>
+                    <p>Chief Financial Officer</p>
+                </div>
+                <div class="team-member">
+                    <img src="/utsa.jpeg" alt="Team Member 3">
+                    <h3>Utsa Das</h3>
+                    <p>Chief Technical Officer</p>
+                </div>
+                <div class="team-member">
+                    <img src="/Santosh.jpeg" alt="Team Member 3">
+                    <h3>Santosh Singh</h3>
+                    <p>Designation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Intersection Observer for Quote Section Animation
+        const quoteContainer = document.querySelector('.quote-container');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, {
+            threshold: 0.3 // Trigger when 30% of the section is visible
+        });
+
+        observer.observe(quoteContainer);
+
+        // Touch Animation for Hero and Team Member Images
+        const heroImage = document.querySelector('.hero-image');
+        const teamImages = document.querySelectorAll('.team-member img');
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            this.classList.add('touched');
+            setTimeout(() => {
+                this.classList.remove('touched');
+            }, 500);
+        }
+
+        heroImage.addEventListener('touchstart', handleTouchStart);
+        teamImages.forEach(img => {
+            img.addEventListener('touchstart', handleTouchStart);
+        });
+    </script>
+</body>
+
+</html>

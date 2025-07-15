@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Banerjee Electronics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #ff0000dc;
+            --secondary-color: #000000;
+            --accent-color: #ffffff;
+            --text-primary: #000000;
+            --text-secondary: #666666;
+            --background-light: #f5f5f5;
+            --white: #ffffff;
+            --gradient-primary: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+            --gradient-secondary: linear-gradient(135deg, #000000 0%, #333333 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.4;
+            color: var(--text-primary);
+            background: var(--background-light);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo img {
+            width: 61px;
+            height: 60px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+            margin: 0;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--accent-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: var(--gradient-primary);
+            color: var(--accent-color);
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover,
+        .nav-cta.active {
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-icon {
+            position: relative;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--primary-color);
+            color: var(--accent-color);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .user-profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-initials {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+        }
+
+        .user-initials:hover,
+        .user-initials:focus {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4), inset 0 3px 6px rgba(255, 255, 255, 0.3);
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: var(--accent-color);
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            width: 220px;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+            z-index: 1001;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 204, 204, 0.9) 100%);
+        }
+
+        .user-dropdown.active {
+            display: flex;
+        }
+
+        .user-dropdown a {
+            padding: 14px 20px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-dropdown a:hover {
+            background: var(--gradient-primary);
+            color: var(--accent-color);
+            padding-left: 25px;
+            transform: translateX(5px);
+        }
+
+        .user-dropdown a:last-child {
+            border-bottom: none;
+        }
+
+        /* Checkout Container */
+        .checkout-container {
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        .checkout-section {
+            background: var(--accent-color);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--primary-color);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+
+        /* Cart Items */
+        .cart-items {
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .cart-item-info {
+            flex-grow: 1;
+        }
+
+        .cart-item-name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .cart-item-price {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+        }
+
+        .cart-item-source {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            background: var(--gradient-primary);
+            color: var(--accent-color);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .cart-total {
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        /* Address Section */
+        .address-section {
+            margin-bottom: 20px;
+        }
+
+        .address-details {
+            background: linear-gradient(135deg, #ffffff 70%, #ffcccc 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .address-details p {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .address-details strong {
+            color: var(--secondary-color);
+        }
+
+        .change-address-btn {
+            background: var(--gradient-primary);
+            color: var(--accent-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .change-address-btn:hover {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            box-shadow: 0 3px 10px rgba(255, 0, 0, 0.3);
+        }
+
+        .address-form {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .address-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--primary-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-primary);
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .save-address-btn {
+            background: var(--gradient-primary);
+            color: var(--accent-color);
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .save-address-btn:hover {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            box-shadow: 0 3px 10px rgba(255, 0, 0, 0.3);
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: linear-gradient(135deg, #ffffff 70%, #ffcccc 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .order-summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .order-summary-total {
+            font-weight: 600;
+            font-size: 1.2rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding-top: 10px;
+        }
+
+        .complete-checkout-btn {
+            width: 100%;
+            background: var(--gradient-primary);
+            color: var(--accent-color);
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .complete-checkout-btn:hover {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cart-content {
+            background: var(--accent-color);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid var(--primary-color);
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .cart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: rgba(0, 0, 0, 0.95);
+                flex-direction: column;
+                justify-content: start;
+                padding-top: 50px;
+                transition: left 0.3s ease;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .checkout-container {
+                grid-template-columns: 1fr;
+                margin: 80px 20px;
+            }
+
+            .user-dropdown {
+                width: 100%;
+                right: 0;
+            }
+
+            .cart-content {
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .cart-item-image {
+                width: 50px;
+                height: 50px;
+            }
+
+            .cart-item-name {
+                font-size: 0.9rem;
+            }
+
+            .cart-item-price,
+            .cart-item-source {
+                font-size: 0.8rem;
+            }
+
+            .mobile-toggle {
+                transition: transform 0.3s ease;
+            }
+
+            .mobile-toggle.active {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="./after login.html" class="logo">
+                <img src="./image/banerjee electronics real logo.jpg" alt="Banerjee Electronics Logo" height="60" width="61">
+                Banerjee Electronics
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="./after login.html#home" class="nav-link">Home</a></li>
+                <li><a href="./after login.html#services" class="nav-link">Services</a></li>
+                <li><a href="./after login.html#products" class="nav-link">Products</a></li>
+                <li><a href="./after login.html#technologies" class="nav-link">Technologies</a></li>
+                <li><a href="./after login.html#consultation" class="nav-link nav-cta">Get Quote</a></li>
+                <li class="user-profile">
+                    <div class="cart-icon" id="cartToggle" role="button" aria-label="View Cart" tabindex="0">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                    <div class="user-initials" id="userInitials" role="button" aria-label="User Profile" tabindex="0">AM
+                    </div>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="./complete profile.html"><i class="fas fa-user-edit"></i> Complete Your Profile</a>
+                        <a href="./order track coustomer.html"><i class="fas fa-box"></i> Your Orders</a>
+                        <a href="./faq section.html"><i class="fas fa-question-circle"></i> FAQ Section</a>
+                        <a href="./login.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                    </div>
+                </li>
+            </ul>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2 class="cart-title">Your Cart</h2>
+                <button class="close-cart" id="closeCart" aria-label="Close Cart"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="cartItemsModal"></div>
+            <div class="cart-total" id="cartTotalModal">Total: ₹0</div>
+            <a href="./checkout.html" class="checkout-btn">Proceed to Checkout</a>
+        </div>
+    </div>
+
+    <!-- Checkout Container -->
+    <div class="checkout-container">
+        <!-- Cart and Address Section -->
+        <div class="checkout-section">
+            <h2 class="section-title">Checkout</h2>
+
+            <!-- Cart Items -->
+            <div class="cart-items" id="cartItems">
+                <p style="text-align: center; color: var(--text-primary);">Your cart is empty.</p>
+            </div>
+            <div class="cart-total" id="cartTotal">Total: ₹0</div>
+
+            <!-- Address Section -->
+            <div class="address-section">
+                <h3 class="section-title">Delivery Address</h3>
+                <div class="address-details" id="addressDetails">
+                    <p><strong>Name:</strong> <span id="addressName"></span></p>
+                    <p><strong>Address Line 1:</strong> <span id="addressLine1"></span></p>
+                    <p><strong>Address Line 2:</strong> <span id="addressLine2"></span></p>
+                    <p><strong>City:</strong> <span id="city"></span></p>
+                    <p><strong>State:</strong> <span id="state"></span></p>
+                    <p><strong>Postal Code:</strong> <span id="postalCode"></span></p>
+                    <p><strong>Country:</strong> <span id="country"></span></p>
+                    <p><strong>Phone:</strong> <span id="phone"></span></p>
+                </div>
+                <button class="change-address-btn" id="changeAddressBtn">Use Different Address</button>
+
+                <!-- Address Form -->
+                <form class="address-form" id="addressForm">
+                    <div class="form-group">
+                        <label for="addressNameInput">Full Name</label>
+                        <input type="text" id="addressNameInput" name="addressName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addressLine1Input">Address Line 1</label>
+                        <input type="text" id="addressLine1Input" name="addressLine1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addressLine2Input">Address Line 2 (Optional)</label>
+                        <input type="text" id="addressLine2Input" name="addressLine2">
+                    </div>
+                    <div class="form-group">
+                        <label for="cityInput">City</label>
+                        <input type="text" id="cityInput" name="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stateInput">State</label>
+                        <input type="text" id="stateInput" name="state" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="postalCodeInput">Postal Code</label>
+                        <input type="text" id="postalCodeInput" name="postalCode" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="countryInput">Country</label>
+                        <input type="text" id="countryInput" name="country" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneInput">Phone Number</label>
+                        <input type="tel" id="phoneInput" name="phone" required>
+                    </div>
+                    <button type="submit" class="save-address-btn">Save Address</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="checkout-section">
+            <h3 class="section-title">Order Summary</h3>
+            <div class="order-summary" id="orderSummary">
+                <!-- Summary items will be populated by JavaScript -->
+            </div>
+            <button class="complete-checkout-btn" id="completeCheckoutBtn">Complete Payment</button>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let userContext = JSON.parse(localStorage.getItem('userContext')) || {};
+
+        // Default address if no address exists in userContext
+        const defaultAddress = {
+            addressName: userContext.firstName && userContext.lastName ? `${userContext.firstName} ${userContext.lastName}` : 'Avi Mukherjee',
+            addressLine1: '123 Technology Lane, Bhatpara',
+            addressLine2: '',
+            city: 'Kolkata',
+            state: 'West Bengal',
+            postalCode: '700123',
+            country: 'India',
+            phone: '+91 98765 43210'
+        };
+
+        // Save cart to localStorage
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartDisplay();
+            displayCart();
+        }
+
+        // Update cart item quantity
+        function updateQuantity(productId, source, quantity) {
+            const cartItem = cart.find(item => item.id === productId && item.source === source);
+            if (cartItem) {
+                cartItem.quantity = Math.max(1, quantity);
+                saveCart();
+            }
+        }
+
+        // Remove item from cart
+        function removeFromCart(productId, source) {
+            cart = cart.filter(item => !(item.id === productId && item.source === source));
+            saveCart();
+        }
+
+        // Display cart items (for checkout page and modal)
+        function displayCart() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            const cartItemsModal = document.getElementById('cartItemsModal');
+            const cartTotalModal = document.getElementById('cartTotalModal');
+            const cartCount = document.getElementById('cartCount');
+            const orderSummary = document.getElementById('orderSummary');
+
+            cartItemsContainer.innerHTML = '';
+            cartItemsModal.innerHTML = '';
+            orderSummary.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p style="text-align: center; color: var(--text-primary);">Your cart is empty.</p>';
+                cartItemsModal.innerHTML = '<p style="text-align: center; color: var(--text-primary);">Your cart is empty.</p>';
+                cartTotal.textContent = 'Total: ₹0';
+                cartTotalModal.textContent = 'Total: ₹0';
+                cartCount.textContent = '0';
+                orderSummary.innerHTML = '<p style="text-align: center;">No items in cart.</p>';
+                document.getElementById('completeCheckoutBtn').disabled = true;
+                return;
+            }
+
+            cart.forEach(item => {
+                // Cart items display (checkout page)
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                    <div class="cart-item-info">
+                        <h3 class="cart-item-name">${item.name}</h3>
+                        <p class="cart-item-price">₹${item.price} x ${item.quantity}</p>
+                        <p class="cart-item-source">From: ${item.source}</p>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <button class="quantity-btn" onclick="updateQuantity(${item.id}, '${item.source}', ${item.quantity - 1})">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity(${item.id}, '${item.source}', ${item.quantity + 1})">+</button>
+                        <button class="remove-item" onclick="removeFromCart(${item.id}, '${item.source}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+
+                // Cart items display (modal)
+                const cartItemModal = cartItem.cloneNode(true);
+                cartItemsModal.appendChild(cartItemModal);
+
+                // Order summary item
+                const summaryItem = document.createElement('div');
+                summaryItem.className = 'order-summary-item';
+                summaryItem.innerHTML = `
+                    <span>${item.name} (x${item.quantity})</span>
+                    <span>₹${(item.price * item.quantity).toLocaleString()}</span>
+                `;
+                orderSummary.appendChild(summaryItem);
+            });
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+
+            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            cartTotal.textContent = `Total: ₹${total.toLocaleString()}`;
+            cartTotalModal.textContent = `Total: ₹${total.toLocaleString()}`;
+
+            const totalSummary = document.createElement('div');
+            totalSummary.className = 'order-summary-total';
+            totalSummary.innerHTML = `
+                <span>Total</span>
+                <span>₹${total.toLocaleString()}</span>
+            `;
+            orderSummary.appendChild(totalSummary);
+
+            document.getElementById('completeCheckoutBtn').disabled = false;
+        }
+
+        // Display address from userContext
+        function displayAddress() {
+            // Check if userContext has all required address fields
+            const hasAddress = userContext.addressLine1 &&
+                userContext.city &&
+                userContext.state &&
+                userContext.postalCode &&
+                userContext.country &&
+                userContext.phone;
+
+            const address = hasAddress ? {
+                addressName: userContext.firstName && userContext.lastName ? `${userContext.firstName} ${userContext.lastName}` : defaultAddress.addressName,
+                addressLine1: userContext.addressLine1,
+                addressLine2: userContext.addressLine2 || '',
+                city: userContext.city,
+                state: userContext.state,
+                postalCode: userContext.postalCode,
+                country: userContext.country,
+                phone: userContext.phone
+            } : defaultAddress;
+
+            document.getElementById('addressName').textContent = address.addressName;
+            document.getElementById('addressLine1').textContent = address.addressLine1;
+            document.getElementById('addressLine2').textContent = address.addressLine2 || 'N/A';
+            document.getElementById('city').textContent = address.city;
+            document.getElementById('state').textContent = address.state;
+            document.getElementById('postalCode').textContent = address.postalCode;
+            document.getElementById('country').textContent = address.country;
+            document.getElementById('phone').textContent = address.phone;
+        }
+
+        // Toggle address form
+        document.getElementById('changeAddressBtn').addEventListener('click', () => {
+            const addressForm = document.getElementById('addressForm');
+            addressForm.classList.toggle('active');
+            if (addressForm.classList.contains('active')) {
+                // Pre-fill form with current address (from userContext or default)
+                const address = userContext.addressLine1 ? {
+                    addressName: userContext.firstName && userContext.lastName ? `${userContext.firstName} ${userContext.lastName}` : defaultAddress.addressName,
+                    addressLine1: userContext.addressLine1,
+                    addressLine2: userContext.addressLine2 || '',
+                    city: userContext.city,
+                    state: userContext.state,
+                    postalCode: userContext.postalCode,
+                    country: userContext.country,
+                    phone: userContext.phone
+                } : defaultAddress;
+
+                document.getElementById('addressNameInput').value = address.addressName;
+                document.getElementById('addressLine1Input').value = address.addressLine1;
+                document.getElementById('addressLine2Input').value = address.addressLine2;
+                document.getElementById('cityInput').value = address.city;
+                document.getElementById('stateInput').value = address.state;
+                document.getElementById('postalCodeInput').value = address.postalCode;
+                document.getElementById('countryInput').value = address.country;
+                document.getElementById('phoneInput').value = address.phone;
+                addressForm.querySelector('#addressNameInput').focus();
+            }
+        });
+
+        // Save new address
+        document.getElementById('addressForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const newAddress = Object.fromEntries(formData);
+
+            // Update userContext with new address
+            userContext.firstName = newAddress.addressName.split(' ')[0] || userContext.firstName || 'Avi';
+            userContext.lastName = newAddress.addressName.split(' ').slice(1).join(' ') || userContext.lastName || 'Mukherjee';
+            userContext.addressLine1 = newAddress.addressLine1;
+            userContext.addressLine2 = newAddress.addressLine2 || '';
+            userContext.city = newAddress.city;
+            userContext.state = newAddress.state;
+            userContext.postalCode = newAddress.postalCode;
+            userContext.country = newAddress.country;
+            userContext.phone = newAddress.phone;
+
+            localStorage.setItem('userContext', JSON.stringify(userContext));
+            displayAddress();
+            document.getElementById('addressForm').classList.remove('active');
+            alert('Address updated successfully!');
+        });
+
+        // Complete checkout
+        document.getElementById('completeCheckoutBtn').addEventListener('click', () => {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+
+            // Simulate successful payment
+            alert('Payment successful! Thank you for your purchase.');
+            localStorage.removeItem('cart'); // Clear cart after successful checkout
+            window.location.href = './order-confirmation.html'; // Redirect to confirmation page
+        });
+
+        // Show cart modal
+        function showCart() {
+            document.getElementById('cartModal').style.display = 'flex';
+        }
+
+        // Close cart modal
+        function closeCart() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        // Get user initials
+        function getUserInitials() {
+            const firstName = userContext.firstName || 'Avi';
+            const lastName = userContext.lastName || 'Mukherjee';
+            return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+        }
+
+        // Toggle user dropdown
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('userContext');
+            localStorage.removeItem('cart');
+            alert('You have been logged out.');
+            window.location.href = './login.html';
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set user initials
+            document.getElementById('userInitials').textContent = getUserInitials();
+
+            // Display cart and address
+            displayCart();
+            displayAddress();
+
+            // Cart toggle event listeners
+            document.getElementById('cartToggle').addEventListener('click', showCart);
+            document.getElementById('cartToggle').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    showCart();
+                }
+            });
+            document.getElementById('closeCart').addEventListener('click', closeCart);
+
+            // User dropdown event listeners
+            document.getElementById('userInitials').addEventListener('click', toggleUserDropdown);
+            document.getElementById('userInitials').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    toggleUserDropdown();
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                const dropdown = document.getElementById('userDropdown');
+                const initials = document.getElementById('userInitials');
+                if (!dropdown.contains(e.target) && !initials.contains(e.target)) {
+                    dropdown.classList.remove('active');
+                }
+            });
+
+            // Mobile menu toggle
+            const mobileToggle = document.getElementById('mobileToggle');
+            const navMenu = document.getElementById('navMenu');
+            mobileToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                mobileToggle.classList.toggle('active');
+                mobileToggle.setAttribute('aria-expanded', navMenu.classList.contains('active'));
+            });
+
+            // Close mobile menu when clicking a link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('active');
+                    mobileToggle.classList.remove('active');
+                    mobileToggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+
+            // Focus trap for cart modal
+            function trapFocus(element) {
+                const focusableElements = element.querySelectorAll(
+                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+                const firstFocusable = focusableElements[0];
+                const lastFocusable = focusableElements[focusableElements.length - 1];
+
+                element.addEventListener('keydown', (e) => {
+                    if (e.key === 'Tab') {
+                        if (e.shiftKey && document.activeElement === firstFocusable) {
+                            e.preventDefault();
+                            lastFocusable.focus();
+                        } else if (!e.shiftKey && document.activeElement === lastFocusable) {
+                            e.preventDefault();
+                            firstFocusable.focus();
+                        }
+                    }
+                });
+            }
+
+            trapFocus(document.getElementById('cartModal'));
+
+            // Escape key to close cart modal
+            document.getElementById('cartModal').addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeCart();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
